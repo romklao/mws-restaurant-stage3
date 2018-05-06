@@ -137,7 +137,7 @@ nav h1 a {
 /* ====================== Map ====================== */
 
 #map {
-  height: 420px;
+  height: 400px;
   width: 100%;
   background-color: #ccc;
 }
@@ -150,7 +150,7 @@ nav h1 a {
 }
 
 .filter-wrap {
-  width: 80%;
+  width: 75%;
   height: 100%;
   display: flex;
   align-items: center;
