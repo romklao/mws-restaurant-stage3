@@ -370,8 +370,24 @@ nav h1 a {
     height: 43vw;
   }
 }
+
+@media screen and (max-width: 650px) {
+  .filter-options h2 {
+    margin: 5px 20px;
+  }
+  .filter-options select {
+    margin: 5px 20px;
+  }
+  .filter-options {
+    height: 130px;
+  }
+}
+
 @media screen and (max-width: 950px) {
   .grid {
     grid-template-columns: repeat(1, 1fr);
+  }
+  .filter-options h2 {
+    width: 100%;
   }
 }
