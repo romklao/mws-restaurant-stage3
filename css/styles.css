@@ -71,7 +71,6 @@ section {
 
 #maincontent {
   background-color: #f3f3f3;
-  min-height: 100%;
 }
 
 .footer {
@@ -199,7 +198,7 @@ nav h1 a {
   width: 80%;
   margin-left: auto;
   margin-right: auto;
-  padding: 35px 0;
+  padding: 35px 0 100px;
 }
 
 .grid {
@@ -255,6 +254,10 @@ nav h1 a {
 }
 
 /* ====================== Restaurant Details ====================== */
+
+#maincontent {
+  position: relative;
+}
 
 .inside header {
   position: fixed;
@@ -330,7 +333,8 @@ nav h1 a {
 #reviews-container {
   position: relative;
   top: 549px;
-  padding-bottom: 70px;   /* Height of the footer */
+  padding-bottom: 90px;
+  background-color: #f3f3f3;
 }
 
 #reviews-container h2 {
