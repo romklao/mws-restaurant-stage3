@@ -354,3 +354,10 @@ nav h1 a {
 #restaurant-hours td {
   color: #666;
 }
+
+
+@media screen and (max-width: 1000px) {
+  .grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
