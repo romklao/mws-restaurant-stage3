@@ -164,7 +164,7 @@ nav h1 a {
   font-size: 1.5em;
   font-weight: normal;
   line-height: 1;
-  width: 200px;
+  width: 195px;
   margin: 0 5px 0 20px;
 }
 
@@ -202,7 +202,6 @@ nav h1 a {
 #restaurants-list li {
   background-color: #fff;
   font-family: Arial,sans-serif;
-  min-height: 380px;
   padding: 25px;
   text-align: left;
   margin: 20px;
@@ -216,6 +215,7 @@ nav h1 a {
   margin: 0;
   width: 30.5vw;
   height: 22vw;
+  max-width: 100%;
 }
 
 #restaurants-list li h1 {
@@ -354,8 +354,23 @@ nav h1 a {
   color: #666;
 }
 
+@media screen and (max-width: 600px) {
+  #restaurants-list {
+    width: 100%;
+  }
+  #restaurants-list .restaurant-img {
+    width: 83.5vw;
+    height: 55vw;
+  }
+}
 
-@media screen and (max-width: 1000px) {
+@media screen and (min-width: 601px) and (max-width: 949px) {
+  #restaurants-list .restaurant-img {
+    width: 65.5vw;
+    height: 43vw;
+  }
+}
+@media screen and (max-width: 950px) {
   .grid {
     grid-template-columns: repeat(1, 1fr);
   }
