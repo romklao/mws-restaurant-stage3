@@ -301,6 +301,7 @@ nav h1 a {
 #restaurant-img {
   width: 80vw;
   height: 45vw;
+  border-radius: 35px 0 35px 0;
 }
 
 #restaurant-address {
@@ -389,8 +390,7 @@ nav h1 a {
   margin: 0 0 30px;
   position: relative;
   width: 100%;
-  border-top-left-radius: 25px;
-  border-bottom-right-radius: 30px;
+  border-radius: 25px 3px 35px 3px;
 }
 
 #reviews-list div {
@@ -429,11 +429,10 @@ nav h1 a {
   padding: 10px 20px;
 }
 
-
 /* Queries */
 @media screen and (max-width: 465px) {
   #restaurant-hours .time-col {
-    padding-right: 48px;
+    padding-right: 43px;
   }
 }
 
