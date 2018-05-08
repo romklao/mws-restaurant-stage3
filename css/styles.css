@@ -298,9 +298,8 @@ nav h1 a {
   box-shadow: 0px 2px 5px 1px #CCC;
 }
 
-
 #restaurant-img {
-  width: 80%;
+  width: 80vw;
   height: 45vw;
 }
 
@@ -366,12 +365,11 @@ nav h1 a {
 
 #restaurant-hours .day-col {
   text-align: right;
-  padding: 0 50px;
+  padding: 0 20px;
   width: 50%;
 }
 #restaurant-hours .time-col {
   text-align: left;
-  padding: 0 40px;
   width: 50%;
 }
 
@@ -433,6 +431,36 @@ nav h1 a {
 
 
 /* Queries */
+@media screen and (max-width: 465px) {
+  #restaurant-hours .time-col {
+    padding-right: 48px;
+  }
+}
+
+@media screen and (min-width: 466px) and (max-width: 520px) {
+  #restaurant-hours .time-col {
+    padding-right: 75px;
+  }
+}
+
+@media screen and (min-width: 520px) and (max-width: 650px) {
+  #restaurant-hours .time-col {
+    padding-right: 97px;
+  }
+}
+
+@media screen and (max-width: 570px) {
+  #restaurant-hours,
+  #restaurant-cuisine,
+  #reviews-list {
+    width: 90%;
+  }
+  #restaurant-img {
+    width: 90vw;
+    height: 60vw;
+  }
+}
+
 @media screen and (max-width: 600px) {
   #restaurants-list {
     width: 100%;
