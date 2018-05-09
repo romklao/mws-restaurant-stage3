@@ -1,6 +1,6 @@
 let restaurants,
-  neighborhoods,
-  cuisines
+    neighborhoods,
+    cuisines
 var map
 var markers = []
 
