@@ -1,6 +1,8 @@
+var staticCacheName = 'restaurant-cache';
+
 self.addEventListener('install', function(event) {
   event.waitUntil(
-    caches.open('restaurant-cache').then(function(cache) {
+    caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
         '/',
         'index.html',
@@ -20,8 +22,12 @@ self.addEventListener('install', function(event) {
         'img/8.jpg',
         'img/9.jpg',
         'img/10.jpg',
+        'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2',
+        'https://fonts.googleapis.com/css?family=Roboto',
       ]);
     })
   );
 });
+
+
 
