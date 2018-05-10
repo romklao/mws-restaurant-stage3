@@ -5,7 +5,7 @@ var map;
 
 
 document.addEventListener('DOMContentLoaded', (event) => {
-  fetchRestaurantFromURL();
+  initMap();
 });
 
 /**
