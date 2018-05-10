@@ -58,7 +58,22 @@
 
   <!-- Beginning scripts -->
   <!-- Google Maps -->
-  <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEdKP64mir7tK9SgJbRmfEfIm8-VZdVXU&libraries=places"></script>
+  <script src="config.js"></script>
+  <script>
+    if (typeof config !== 'undefined') {
+      var mykey = config.MY_KEY;
+
+      function loadScript() {
+        var script = document.createElement('script');
+        script.src = 'https://maps.googleapis.com/maps/api/js?key=' + mykey + '&libraries=places&callback=initMap';
+        script.setAttribute('defer','');
+        document.body.appendChild(script);
+      }
+      document.addEventListener('DOMContentLoaded', (event) => {
+        loadScript();
+      });
+    }
+  </script>
   <!-- Database helpers -->
   <script src="js/dbhelper.js"></script>
   <!-- Main javascript file -->
