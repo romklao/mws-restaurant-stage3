@@ -35,7 +35,7 @@
       <ul id="restaurants-list" class="grid"></ul>
     </section>
   </main>
-  <script type="text/javascript">
+  <script>
     if (navigator.serviceWorker) {
       navigator.serviceWorker.register('/sw.js').then(function() {
         console.log('Registration worked!');
@@ -44,10 +44,25 @@
       });
     }
   </script>
-  <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEdKP64mir7tK9SgJbRmfEfIm8-VZdVXU&libraries=places"></script>
+  <script src="config.js"></script>
+  <script>
+    if (typeof config !== 'undefined') {
+      var mykey = config.MY_KEY;
 
-  <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-  <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
+      function loadScript() {
+        var script = document.createElement('script');
+        script.src = 'https://maps.googleapis.com/maps/api/js?key=' + mykey + '&libraries=places&callback=initMap';
+        script.setAttribute('defer','');
+        document.body.appendChild(script);
+      }
+      document.addEventListener('DOMContentLoaded', (event) => {
+        loadScript();
+      });
+    }
+  </script>
+  <!-- <script defer src="https://maps.googleapis.com/maps/api/js?key=" + config.MY_KEY + "&libraries=places"></script> -->
+  <script src="js/dbhelper.js"></script>
+  <script src="js/main.js"></script>
 
   <footer class="footer">
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
