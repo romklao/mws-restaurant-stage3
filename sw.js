@@ -1,3 +1,5 @@
+'use strict';
+
 var staticCacheName = 'restaurant-cache';
 
 self.addEventListener('install', function(event) {
