@@ -40,7 +40,6 @@ let fillBreadcrumb = (restaurant=self.restaurant) => {
   breadcrumb.appendChild(li);
 }
 
-
 /**
  * Get a parameter by name from page URL.
  */
