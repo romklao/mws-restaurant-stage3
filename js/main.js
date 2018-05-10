@@ -1,3 +1,4 @@
+
 let restaurants,
     neighborhoods,
     cuisines
@@ -131,7 +132,9 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
   });
-  addMarkersToMap();
+  if(typeof google !== 'undefined') {
+    addMarkersToMap();
+  }
 }
 
 /**
