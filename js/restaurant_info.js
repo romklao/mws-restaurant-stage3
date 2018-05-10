@@ -5,14 +5,14 @@ var map;
 
 
 document.addEventListener('DOMContentLoaded', (event) => {
-  initMap();
+  fetchRestaurantFromURL();
 });
 
 /**
  * Initialize Google map, called from HTML.
  */
 
-let initMap = () => {
+window.initMap = () => {
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
       console.error(error);
