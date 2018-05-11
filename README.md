@@ -16,8 +16,8 @@
 
 3. In the terminal, create a config.js file and open it up:
 
-  `touch config.js`
-  `atom config.js`
+  - `touch config.js`
+  - `atom config.js`
 
 4. In the config file, add  `var config = { MY_KEY: 'YOUR_GOOGLE_MAPS_API_KEY' }`.
 
