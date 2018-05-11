@@ -201,6 +201,7 @@ nav h1 a {
   padding: 35px 0 100px;
 }
 
+/* Style grid layout */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
