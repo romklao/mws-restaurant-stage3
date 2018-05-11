@@ -1,6 +1,6 @@
 # Mobile Web Specialist Certification Course
 ---
-### Restaurant Reviews_Stage 1
+## Restaurant Reviews_Stage 1
 
 - Responsive: This project is a fully responsive that all pages elements are usable and visible in any devices, including desktop, tablet, and mobile display.
 
@@ -8,7 +8,7 @@
 
 - Cache the static site for offline use: Use Cache API and a Service Worker to cache the data for the website so that any page (including images) that has been visited is accessible offline.
 
-### How to Run
+## How to Run
 
 1. Clone the project into your local `git clone git@github.com:romklao/mws-restaurant-stage-1.git`
 
