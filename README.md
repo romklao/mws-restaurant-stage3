@@ -1,5 +1,5 @@
 # Mobile Web Specialist Certification Course
----
+
 ## Restaurant Reviews_Stage 1
 
 - Responsive: This project is a fully responsive that all pages elements are usable and visible in any devices, including desktop, tablet, and mobile display.
