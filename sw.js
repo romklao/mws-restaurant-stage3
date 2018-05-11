@@ -2,6 +2,10 @@
 
 var staticCacheName = 'restaurant-cache';
 
+/* Cache all url in the storage cache so that any page
+ * that has been visited is accessible offline
+ * staticCacheName is the variable storing the cache name
+*/
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
@@ -41,6 +45,7 @@ self.addEventListener('install', function(event) {
   );
 });
 
+/* Remove the old cache */
 self.addEventListener('activate', function(event) {
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
@@ -57,6 +62,7 @@ self.addEventListener('activate', function(event) {
   );
 });
 
+/* Fetch and response if the data is match. If it is not match send a request to the network*/
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request).then(response => {

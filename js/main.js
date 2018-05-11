@@ -168,6 +168,9 @@ let updateRestaurants = () => {
   })
 }
 
+/**
+ * Initialize Google map, called from HTML.
+ */
 window.initMap = () => {
   if (typeof google !== 'undefined') {
     let loc = {
