@@ -59,21 +59,7 @@
 
   <!-- Beginning scripts -->
   <!-- Google Maps -->
-  <script src="config.js"></script>
-  <script>
-    var mykey = "GOOGLE API KEY HERE";
-    if (typeof config !== 'undefined') {
-      mykey = config.MY_KEY;
-    }
-    function loadScript() {
-      var script = document.createElement('script');
-      script.src = 'https://maps.googleapis.com/maps/api/js?key=' + mykey + '&libraries=places&callback=initMap';
-      script.setAttribute('defer','');
-      document.body.appendChild(script);
-    }
-    document.addEventListener('DOMContentLoaded', (event) => {
-      loadScript();
-    });
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgyFZM_LoHMeHdDJS_Sjld3qQ0uuOSF_8&libraries=places&callback=initMap"></script>
   </script>
   <!-- Database helpers -->
   <script src="js/dbhelper.js"></script>
