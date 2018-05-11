@@ -2,9 +2,10 @@
 <html>
 
 <head>
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css"/>
   <link rel="stylesheet" href="css/styles.css">
   <title>Restaurant Reviews</title>
 </head>
@@ -24,10 +25,10 @@
       <div class="filter-options">
         <div class="filter-wrap">
           <h2>Filter Results</h2>
-          <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" role="listbox" aria-label="Select Neighborhood" tabindex="1">
+          <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Select Neighborhood" tabindex="1">
             <option value="all" role="option">All Neighborhoods</option>
           </select>
-          <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" role="listbox" aria-label="Select cuisine" tabindex="2">
+          <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Select cuisine" tabindex="2">
             <option value="all" role="option">All Cuisines</option>
           </select>
         </div>
@@ -49,19 +50,21 @@
 <!-- Dynamically create script for Google Maps API so we can call the API key
   that we store it in the config.js and use the variable instead of showing the API key-->
    <script>
+    var mykey = "GOOGLE API KEY HERE";
     if (typeof config !== 'undefined') {
-      var mykey = config.MY_KEY;
-
-      function loadScript() {
-        var script = document.createElement('script');
-        script.src = 'https://maps.googleapis.com/maps/api/js?key=' + mykey + '&libraries=places&callback=initMap';
-        script.setAttribute('defer','');
-        document.body.appendChild(script);
-      }
-      document.addEventListener('DOMContentLoaded', (event) => {
-        loadScript();
-      });
+      mykey = config.MY_KEY;
     }
+
+    function loadScript() {
+      var script = document.createElement('script');
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=' + mykey + '&libraries=places&callback=initMap';
+      script.setAttribute('defer','');
+      document.body.appendChild(script);
+    }
+    document.addEventListener('DOMContentLoaded', (event) => {
+      loadScript();
+    });
+
   </script>
   <script src="js/dbhelper.js"></script>
   <script src="js/main.js"></script>
