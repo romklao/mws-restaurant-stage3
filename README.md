@@ -13,8 +13,7 @@ Cache the static site for offline use: Use Cache API and a Service Worker to cac
 - Clone the project into your local `git clone git@github.com:romklao/mws-restaurant-stage-1.git`
 - Get your own Google Maps API key https://developers.google.com/maps/documentation/javascript/get-api-key
 - Create `config.js` file
-- Create config object to store Google Maps API key in `config.js`.
-  `var config = { MY_KEY: 'YOUR_GOOGLE_MAPS_API_KEY' }`
+- Add  `var config = { MY_KEY: 'YOUR_GOOGLE_MAPS_API_KEY' }` in `config.js`.
 - Replace the text `YOUR_GOOGLE_MAPS_API_KEY` with your own Google Maps API key.
 - In a terminal, check the version of Python you have: python -V. If you have Python 2.x, spin up
   the server with `python -m SimpleHTTPServer 8000`
