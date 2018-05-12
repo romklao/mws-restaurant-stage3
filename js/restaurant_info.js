@@ -144,7 +144,7 @@ let fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
-  title.setAttribute('tabindex', '7');
+  title.setAttribute('tabindex', '6');
 
   container.appendChild(title);
 
@@ -170,14 +170,14 @@ let createReviewHTML = (review) => {
   const name = document.createElement('p');
   name.innerHTML = review.name;
   name.className = 'review-name';
-  name.setAttribute('tabindex', '8');
+  name.setAttribute('tabindex', '7');
 
   div.appendChild(name);
 
   const date = document.createElement('p');
   date.innerHTML = review.date;
   date.className = 'review-date';
-  date.setAttribute('tabindex', '8');
+  date.setAttribute('tabindex', '7');
 
   div.appendChild(date);
   li.appendChild(div);
@@ -185,12 +185,12 @@ let createReviewHTML = (review) => {
   const rating = document.createElement('p');
   rating.innerHTML = `RATING: ${review.rating}`;
   rating.className = 'review-rating';
-  rating.setAttribute('tabindex', '8');
+  rating.setAttribute('tabindex', '7');
   li.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
-  comments.setAttribute('tabindex', '8');
+  comments.setAttribute('tabindex', '7');
   li.appendChild(comments);
 
   return li;
