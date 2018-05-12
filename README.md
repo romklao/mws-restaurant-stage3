@@ -18,7 +18,7 @@
 
     `<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initMap"></script>`
 
-4. In the restaurant.html file line 40, replace the text `YOUR_GOOGLE_MAPS_API_KEY` with your own Google Maps API key.
+4. In the restaurant.html file line 62, replace the text `YOUR_GOOGLE_MAPS_API_KEY` with your own Google Maps API key.
 
     `<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initMap"></script>`
 
