@@ -62,15 +62,20 @@ self.addEventListener('activate', function(event) {
   );
 });
 
-/* Fetch and response if the data is match. If it is not match send a request to the network*/
-self.addEventListener('fetch', event => {
+/* If a request doesn't match anything in the cache, get it from the network,
+send it to the page and add it to the cache at the same time.*/
+self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
+    caches.open(staticCacheName).then(function(cache) {
+      return cache.match(event.request).then(function (response) {
+        return response || fetch(event.request).then(function(response) {
+          cache.put(event.request, response.clone());
+          return response;
+        });
+      });
     })
     .catch(err => console.log(err, event.request))
   );
 });
-
 
 
