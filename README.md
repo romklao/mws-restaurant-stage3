@@ -14,21 +14,20 @@
 
 2. Get your own Google Maps API key https://developers.google.com/maps/documentation/javascript/get-api-key.
 
-3. In the terminal, create a config.js file and open it up:
+3. In the index.html file line 40, replace the text `YOUR_GOOGLE_MAPS_API_KEY` with your own Google Maps API key.
 
-    * `touch config.js`
-    * `atom config.js`
+    `<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initMap"></script>`
 
-4. In the config file, add  `var config = { MY_KEY: 'YOUR_GOOGLE_MAPS_API_KEY' }`.
+4. In the restaurant.html file line 40, replace the text `YOUR_GOOGLE_MAPS_API_KEY` with your own Google Maps API key.
 
-5. In the config file, replace the text `YOUR_GOOGLE_MAPS_API_KEY` with your own Google Maps API key.
+    `<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initMap"></script>`
 
-6. In a terminal, check the version of Python you have: python -V and launch a local client server using Python from your terminal:
+5. In a terminal, check the version of Python you have: python -V and launch a local client server using Python from your terminal:
 
     * Python 2: `python -m SimpleHTTPServer 8000`
     * Python 3: `python3 -m http.server 8000`
 
-7. Visit the site in your browser at http://localhost:8000
+6. Visit the site in your browser at http://localhost:8000
 
 
 
