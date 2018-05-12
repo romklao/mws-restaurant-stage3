@@ -87,17 +87,21 @@ let fetchRestaurantFromURL = (callback) => {
 let fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
-
-  const address = document.getElementById('restaurant-address');
-  address.innerHTML = restaurant.address;
+  name.setAttribute('tabindex', '1');
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.alt = `${restaurant.name} is the ${restaurant.cuisine_type} restaurant`;
+  image.setAttribute('tabindex', '2');
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
+  cuisine.setAttribute('tabindex', '3');
+
+  const address = document.getElementById('restaurant-address');
+  address.innerHTML = restaurant.address;
+  address.setAttribute('tabindex', '4');
 
   // fill operating hours
   if (restaurant.operating_hours) {
@@ -119,11 +123,14 @@ let fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours)
     const day = document.createElement('td');
     day.innerHTML = key;
     day.className = 'day-col';
+    day.setAttribute('tabindex', '5');
+
     row.appendChild(day);
 
     const time = document.createElement('td');
     time.innerHTML = operatingHours[key];
     time.className = 'time-col';
+    time.setAttribute('tabindex', '5');
     row.appendChild(time);
 
     hours.appendChild(row);
@@ -137,6 +144,8 @@ let fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
+  title.setAttribute('tabindex', '7');
+
   container.appendChild(title);
 
   if (!reviews) {
@@ -161,21 +170,27 @@ let createReviewHTML = (review) => {
   const name = document.createElement('p');
   name.innerHTML = review.name;
   name.className = 'review-name';
+  name.setAttribute('tabindex', '8');
+
   div.appendChild(name);
 
   const date = document.createElement('p');
   date.innerHTML = review.date;
   date.className = 'review-date';
+  date.setAttribute('tabindex', '8');
+
   div.appendChild(date);
   li.appendChild(div);
 
   const rating = document.createElement('p');
   rating.innerHTML = `RATING: ${review.rating}`;
   rating.className = 'review-rating';
+  rating.setAttribute('tabindex', '8');
   li.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
+  comments.setAttribute('tabindex', '8');
   li.appendChild(comments);
 
   return li;
