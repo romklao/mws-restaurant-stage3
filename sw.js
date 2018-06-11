@@ -67,7 +67,7 @@ send it to the page and add it to the cache at the same time.*/
 self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.open(staticCacheName).then(function(cache) {
-      return cache.match(event.request).then(function (response) {
+      return cache.match(event.request).then(function(response) {
         return response || fetch(event.request).then(function(response) {
           cache.put(event.request, response.clone());
           return response;
