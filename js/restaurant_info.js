@@ -6,6 +6,7 @@ var map;
 
 document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
+  gm_authFailure();
 });
 
 /**
@@ -28,6 +29,11 @@ window.initMap = () => {
       }
     }
   });
+}
+
+window.gm_authFailure = () => {
+  const mapView = document.getElementById('map-container');
+  mapView.innerHTML = '<p id="error-map">Authentication Error with Google Map!</p>';
 }
 
 /**
