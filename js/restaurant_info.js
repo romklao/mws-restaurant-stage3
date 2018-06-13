@@ -3,12 +3,6 @@
 let restaurant;
 var map;
 
-
-document.addEventListener('DOMContentLoaded', (event) => {
-  initMap();
-  gm_authFailure();
-});
-
 /**
  * Initialize Google map, called from HTML.
  */
