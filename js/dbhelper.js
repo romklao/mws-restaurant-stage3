@@ -1,36 +1,77 @@
 'use strict';
 
+import idb from 'idb';
+
+var dbPromise;
 /**
  * Common database helper functions.
  */
 class DBHelper {
 
+  static openDatabase() {
+    if (!navigator.serviceWorker) {
+      return Promise.resolve();
+    }
+
+    return idb.open('restaurants', 1, function(upgradeDb) {
+      upgradeDb.createObjectStore('restaurants', {
+        keyPath: 'id'
+      });
+    });
+  }
   /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    const port = 8000 // Change this to your server port
-    return `http://localhost:${port}/data/restaurants.json`;
+    const port = 1337;// Change this to your server port
+    return `http://localhost:${port}/restaurants`;
+  }
+
+  static getCachedRestaurants() {
+    dbPromise = DBHelper.openDatabase();
+    return dbPromise.then(function(db) {
+      let tx = db.transaction('restaurants', 'readwrite');
+      let restaurantsStore = tx.objectStore('restaurants');
+
+      return restaurantsStore.getAll();
+    })
+      .then(function(restaurants) {
+        console.log('Restaurants data', restaurants);
+      });
   }
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
-    xhr.onload = () => {
-      if (xhr.status === 200) { // Got a success response from server!
-        const json = JSON.parse(xhr.responseText);
-        const restaurants = json.restaurants;
+    fetch(DBHelper.DATABASE_URL, {credentials: 'same-origin'})
+      .then(response => {
+        if (response.ok) {
+          return response;
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then(response => response.json())
+      .then(restaurants => {
+
+        dbPromise = DBHelper.openDatabase();
+
+        dbPromise.then(function(db) {
+          if (!db) return db;
+
+          let tx = db.transaction('restaurants', 'readwrite');
+          let restaurantsStore = tx.objectStore('restaurants');
+
+          restaurants.forEach(restaurant => restaurantsStore.put(restaurant));
+
+          return tx.complete;
+        });
         callback(null, restaurants);
-      } else { // Oops!. Got an error from server.
-        const error = (`Request failed. Returned status of ${xhr.status}`);
-        callback(error, null);
-      }
-    };
-    xhr.send();
+      })
+      .then(function() {
+        console.log('Restaurants added');
+      });
   }
 
   /**
@@ -93,7 +134,7 @@ class DBHelper {
       if (error) {
         callback(error, null);
       } else {
-        let results = restaurants
+        let results = restaurants;
         if (cuisine != 'all') { // filter by cuisine
           results = results.filter(r => r.cuisine_type == cuisine);
         }
@@ -115,9 +156,9 @@ class DBHelper {
         callback(error, null);
       } else {
         // Get all neighborhoods from all restaurants
-        const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood)
+        const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood);
         // Remove duplicates from neighborhoods
-        const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i)
+        const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i);
         callback(null, uniqueNeighborhoods);
       }
     });
@@ -133,9 +174,9 @@ class DBHelper {
         callback(error, null);
       } else {
         // Get all cuisines from all restaurants
-        const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type)
+        const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type);
         // Remove duplicates from cuisines
-        const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i)
+        const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i);
         callback(null, uniqueCuisines);
       }
     });
@@ -152,7 +193,10 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photograph}`);
+    if (restaurant.photograph === undefined) {
+      restaurant.photograph = 10;
+    }
+    return (`/img/${restaurant.photograph}.jpg`);
   }
 
   /**
@@ -175,7 +219,7 @@ class DBHelper {
  */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+    navigator.serviceWorker.register('js/sw.js').then(function(registration) {
       // Registration was successful
       console.log('ServiceWorker registration successful with scope: ', registration.scope);
     }, function(err) {
@@ -184,3 +228,5 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+
+export default DBHelper;
