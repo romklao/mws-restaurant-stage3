@@ -43,7 +43,7 @@ gulp.task('copy-scripts', function() {
       presets: ['env']
     }))
     .pipe(sourcemaps.init())
-    .pipe(sourcemaps.write('maps')) // You need this if you want to continue using the stream with other plugins
+    .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('dist2/js'));
 });
 
@@ -61,7 +61,7 @@ gulp.task('scripts:main', function() {
     .pipe(source('main_bundle.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init())
-    .pipe(sourcemaps.write('maps')) // You need this if you want to continue using the stream with other plugins
+    .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('./dist/js'));
 });
 
