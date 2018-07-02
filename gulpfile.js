@@ -12,7 +12,9 @@ const babelify = require('babelify');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 
-
+/**
+ * @copy style.css from css folder to sass and then point to dist
+ */
 gulp.task('styles', function() {
   return gulp.src('sass/**/*.scss')
     .pipe(sourcemaps.init())
@@ -25,24 +27,34 @@ gulp.task('styles', function() {
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/css'));
 });
-
+/**
+ * @copy html file and save it to dist
+ */
 gulp.task('copy-html', function() {
   return gulp.src('./*.html')
     .pipe(gulp.dest('./dist'));
 });
-
+/**
+ * @copy image folder and save it to dist
+ */
 gulp.task('copy-images', function() {
   return gulp.src('img/*')
     .pipe(gulp.dest('dist/img'));
 });
-
+/**
+ * @copy sw.js, sourcemaps so it can be debugged in the web dev tool,
+ * and save it to dist
+ */
 gulp.task('scripts:sw', function() {
   return gulp.src('sw.js')
     .pipe(sourcemaps.init())
     .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('./dist'));
 });
-
+/**
+ * @copy javascript file (main page), transpiler by using browserify
+ * to allow using the latest js versoin, sourcemaps, and save it to dist
+ */
 gulp.task('scripts:main', function() {
   return browserify(['js/main.js', 'js/dbhelper.js'])
     .transform(babelify.configure({
@@ -55,7 +67,10 @@ gulp.task('scripts:main', function() {
     .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('./dist/js'));
 });
-
+/**
+ * @copy javascript file(restaurant page), transpiler by using browserify
+ * to allow using the latest js versoin, sourcemaps, and save it to dist
+ */
 gulp.task('scripts:restaurant', function() {
   return browserify(['js/restaurant_info.js', 'js/dbhelper.js'])
     .transform(babelify.configure({
@@ -68,7 +83,10 @@ gulp.task('scripts:restaurant', function() {
     .pipe(sourcemaps.write('maps')) // You need this if you want to continue using the stream with other plugins
     .pipe(gulp.dest('./dist/js'));
 });
-
+/**
+ * @copy image folder, optimize and compress
+ * so original visual information stays exactly the same, and save it to dist
+ */
 gulp.task('images-process', function() {
   return gulp.src('img/*')
     .pipe(imagemin({
@@ -87,7 +105,9 @@ gulp.task('dist', gulp.series(gulp.parallel(
 )));
 
 gulp.task('test', gulp.series('dist'));
-
+/**
+ * @set the tasks to default when run gulp
+ */
 gulp.task('default', gulp.series(gulp.parallel(
   'copy-images',
   'copy-html',

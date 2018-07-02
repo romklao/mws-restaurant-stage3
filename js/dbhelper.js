@@ -16,6 +16,9 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
 
+  /**
+   * @pen database to store data retrieved from the server in indexedDB API
+   */
   static openDatabase() {
     if (!navigator.serviceWorker) {
       return Promise.resolve();
@@ -27,7 +30,10 @@ class DBHelper {
       });
     });
   }
-
+  /**
+   * @keep data in indexedDB after fetching it from the server
+     @param {string} restaurants - retrieved data from the server
+   */
   static storeDataIndexedDB(restaurants) {
     let dbPromise = DBHelper.openDatabase();
     dbPromise.then(function(db) {
@@ -49,7 +55,10 @@ class DBHelper {
         });
     });
   }
-
+  /**
+   * @get data from indexedDB if the data available after
+   *  it is collected from fetching
+   */
   static getCachedRestaurants() {
     let dbPromise = DBHelper.openDatabase();
     dbPromise.then(function(db) {
@@ -66,7 +75,7 @@ class DBHelper {
   }
 
   /**
-   * Fetch all restaurants.
+   * @fetch all restaurants.
    */
   static fetchRestaurants(callback) {
 
@@ -91,7 +100,7 @@ class DBHelper {
   }
 
   /**
-   * Fetch a restaurant by its ID.
+   * @fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
@@ -110,7 +119,7 @@ class DBHelper {
   }
 
   /**
-   * Fetch restaurants by a cuisine type with proper error handling.
+   * @fetch restaurants by a cuisine type with proper error handling.
    */
   static fetchRestaurantByCuisine(cuisine, callback) {
     // Fetch all restaurants  with proper error handling
@@ -126,7 +135,7 @@ class DBHelper {
   }
 
   /**
-   * Fetch restaurants by a neighborhood with proper error handling.
+   * @fetch restaurants by a neighborhood with proper error handling.
    */
   static fetchRestaurantByNeighborhood(neighborhood, callback) {
     // Fetch all restaurants
@@ -142,7 +151,7 @@ class DBHelper {
   }
 
   /**
-   * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
+   * @fetch restaurants by a cuisine and a neighborhood with proper error handling.
    */
   static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
     // Fetch all restaurants
@@ -163,7 +172,7 @@ class DBHelper {
   }
 
   /**
-   * Fetch all neighborhoods with proper error handling.
+   * @fetch all neighborhoods with proper error handling.
    */
   static fetchNeighborhoods(callback) {
     // Fetch all restaurants
@@ -181,7 +190,7 @@ class DBHelper {
   }
 
   /**
-   * Fetch all cuisines with proper error handling.
+   * @fetch all cuisines with proper error handling.
    */
   static fetchCuisines(callback) {
     // Fetch all restaurants
@@ -199,14 +208,14 @@ class DBHelper {
   }
 
   /**
-   * Restaurant page URL.
+   * @restaurant page URL.
    */
   static urlForRestaurant(restaurant) {
     return (`./restaurant.html?id=${restaurant.id}`);
   }
 
   /**
-   * Restaurant image URL.
+   * @restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
     if (restaurant.photograph === undefined) {
@@ -216,7 +225,7 @@ class DBHelper {
   }
 
   /**
-   * Map marker for a restaurant.
+   * @Map marker for a restaurant.
    */
   static mapMarkerForRestaurant(restaurant, map) {
     const marker = new google.maps.Marker({
@@ -228,9 +237,9 @@ class DBHelper {
     );
     return marker;
   }
-  /* Register ServiceWorker to cache data for the site
- * to allow any page that has been visited is accessible offline
- */
+  /* @register ServiceWorker to cache data for the site
+   * to allow any page that has been visited is accessible offline
+   */
   static registerServiceWorker() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
