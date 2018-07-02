@@ -21,8 +21,8 @@ let initMap = () => {
           center: restaurant.latlng,
           scrollwheel: false
         });
+        DBHelper.mapMarkerForRestaurant(restaurant, self.map);
         fillBreadcrumb(restaurant);
-        DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
       }
     }
   });
@@ -41,6 +41,7 @@ let fillBreadcrumb = (restaurant) => {
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;
   breadcrumb.appendChild(li);
+  return li;
 };
 
 /**
@@ -106,13 +107,10 @@ let fillRestaurantHTML = (restaurant) => {
   address.setAttribute('tabindex', '4');
 
   // fill operating hours
-  if (restaurant.operating_hours) {
-    fillRestaurantHoursHTML(restaurant.operating_hours);
-  }
+  fillRestaurantHoursHTML(restaurant.operating_hours);
+
   // fill reviews
-  if (restaurant.reviews) {
-    fillReviewsHTML(restaurant.reviews);
-  }
+  fillReviewsHTML(restaurant.reviews);
 };
 
 /**
