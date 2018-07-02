@@ -37,19 +37,11 @@ gulp.task('copy-images', function() {
     .pipe(gulp.dest('dist/img'));
 });
 
-gulp.task('copy-scripts', function() {
-  browserify(['js/**/*.js', 'sw.js'])
-    .transform(babelify.configure({
-      presets: ['env']
-    }))
+gulp.task('scripts:sw', function() {
+  return gulp.src('sw.js')
     .pipe(sourcemaps.init())
     .pipe(sourcemaps.write('maps'))
-    .pipe(gulp.dest('dist2/js'));
-});
-
-gulp.task('scripts:sw', function() {
-  return gulp.src('./sw.js')
-    .pipe(gulp.dest('./dist/js'));
+    .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('scripts:main', function() {
@@ -98,9 +90,9 @@ gulp.task('dist', gulp.series(gulp.parallel(
 gulp.task('test', gulp.series('dist'));
 
 gulp.task('default', gulp.series(gulp.parallel(
-  'styles',
-  'copy-html',
   'copy-images',
+  'copy-html',
+  'styles',
   'scripts:main',
   'scripts:restaurant',
   'scripts:sw'), function() {
