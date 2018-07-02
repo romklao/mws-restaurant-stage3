@@ -100,6 +100,7 @@ gulp.task('dist', gulp.series(gulp.parallel(
   'copy-html',
   'images-process',
   'styles',
+  'scripts:sw',
   'scripts:main',
   'scripts:restaurant'
 )));
