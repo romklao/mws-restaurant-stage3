@@ -2,11 +2,19 @@
 
 import idb from 'idb';
 
-var dbPromise;
 /**
  * Common database helper functions.
  */
 class DBHelper {
+
+  /**
+   * Database URL.
+   * Change this to restaurants.json file location on your server.
+   */
+  static get DATABASE_URL() {
+    const port = 1337;// Change this to your server port
+    return `http://localhost:${port}/restaurants`;
+  }
 
   static openDatabase() {
     if (!navigator.serviceWorker) {
@@ -19,25 +27,41 @@ class DBHelper {
       });
     });
   }
-  /**
-   * Database URL.
-   * Change this to restaurants.json file location on your server.
-   */
-  static get DATABASE_URL() {
-    const port = 1337;// Change this to your server port
-    return `http://localhost:${port}/restaurants`;
-  }
 
-  static getCachedRestaurants() {
-    dbPromise = DBHelper.openDatabase();
-    return dbPromise.then(function(db) {
+  static storeDataIndexedDB(restaurants) {
+    let dbPromise = DBHelper.openDatabase();
+    dbPromise.then(function(db) {
+
+      if (!db) return db;
+
       let tx = db.transaction('restaurants', 'readwrite');
       let restaurantsStore = tx.objectStore('restaurants');
 
+      restaurants.forEach(restaurant => restaurantsStore.put(restaurant));
+
+      restaurantsStore.openCursor(null , 'prev').then(function(cursor){
+        return cursor.advance(30);
+      })
+        .then(function deleteRest(cursor){
+          if(!cursor) return;
+          cursor.delete();
+          return cursor.continue().then(deleteRest);
+        });
+    });
+  }
+
+  static getCachedRestaurants() {
+    let dbPromise = DBHelper.openDatabase();
+    dbPromise.then(function(db) {
+
+      if(!db) return;
+
+      let tx = db.transaction('restaurants');
+      let restaurantsStore = tx.objectStore('restaurants');
       return restaurantsStore.getAll();
     })
       .then(function(restaurants) {
-        console.log('Restaurants data', restaurants);
+        console.log('restaurantsDB', restaurants);
       });
   }
 
@@ -45,6 +69,9 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
+
+    DBHelper.getCachedRestaurants();
+
     fetch(DBHelper.DATABASE_URL, {credentials: 'same-origin'})
       .then(response => {
         if (response.ok) {
@@ -55,22 +82,11 @@ class DBHelper {
       .then(response => response.json())
       .then(restaurants => {
 
-        dbPromise = DBHelper.openDatabase();
-
-        dbPromise.then(function(db) {
-          if (!db) return db;
-
-          let tx = db.transaction('restaurants', 'readwrite');
-          let restaurantsStore = tx.objectStore('restaurants');
-
-          restaurants.forEach(restaurant => restaurantsStore.put(restaurant));
-
-          return tx.complete;
-        });
-        callback(null, restaurants);
+        DBHelper.storeDataIndexedDB(restaurants);
+        return callback(null, restaurants);
       })
-      .then(function() {
-        console.log('Restaurants added');
+      .catch(err => {
+        return callback(err , null);
       });
   }
 
@@ -219,13 +235,14 @@ class DBHelper {
  */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('js/sw.js').then(function(registration) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(function(registration) {
       // Registration was successful
-      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    }, function(err) {
-      // registration failed :(
-      console.log('ServiceWorker registration failed: ', err);
-    });
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, function(err) {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', err);
+      });
   });
 }
 
