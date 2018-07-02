@@ -5,8 +5,8 @@ import idb from 'idb';
 /**
  * Common database helper functions.
  */
-class DBHelper {
 
+class DBHelper {
   /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
@@ -23,11 +23,8 @@ class DBHelper {
     if (!navigator.serviceWorker) {
       return Promise.resolve();
     }
-
-    return idb.open('restaurants', 1, function(upgradeDb) {
-      upgradeDb.createObjectStore('restaurants', {
-        keyPath: 'id'
-      });
+    return idb.open('restaurants', 1, (upgradeDb) => {
+      upgradeDb.createObjectStore('restaurants', { keyPath: 'id'});
     });
   }
   /**
@@ -36,7 +33,7 @@ class DBHelper {
    */
   static storeDataIndexedDB(restaurants) {
     let dbPromise = DBHelper.openDatabase();
-    dbPromise.then(function(db) {
+    dbPromise.then(db => {
 
       if (!db) return db;
 
@@ -45,7 +42,7 @@ class DBHelper {
 
       restaurants.forEach(restaurant => restaurantsStore.put(restaurant));
 
-      restaurantsStore.openCursor(null , 'prev').then(function(cursor){
+      restaurantsStore.openCursor(null , 'prev').then(cursor => {
         return cursor.advance(30);
       })
         .then(function deleteRest(cursor){
@@ -61,42 +58,42 @@ class DBHelper {
    */
   static getCachedRestaurants() {
     let dbPromise = DBHelper.openDatabase();
-    dbPromise.then(function(db) {
+
+    return dbPromise.then(function(db) {
 
       if(!db) return;
 
       let tx = db.transaction('restaurants');
       let restaurantsStore = tx.objectStore('restaurants');
       return restaurantsStore.getAll();
-    })
-      .then(function(restaurants) {
-        console.log('restaurantsDB', restaurants);
-      });
+    });
   }
 
   /**
    * @fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-
-    DBHelper.getCachedRestaurants();
-
-    fetch(DBHelper.DATABASE_URL, {credentials: 'same-origin'})
-      .then(response => {
-        if (response.ok) {
-          return response;
-        }
-        throw new Error('Network response was not ok.');
-      })
-      .then(response => response.json())
-      .then(restaurants => {
-
-        DBHelper.storeDataIndexedDB(restaurants);
-        return callback(null, restaurants);
-      })
-      .catch(err => {
-        return callback(err , null);
-      });
+    DBHelper.getCachedRestaurants().then(restaurants => {
+      if (restaurants.length > 0) {
+        callback(null, restaurants);
+      } else {
+        fetch(DBHelper.DATABASE_URL, {credentials: 'same-origin'})
+          .then(response => {
+            if (response.ok) {
+              return response;
+            }
+            throw new Error('Network response was not ok.');
+          })
+          .then(response => response.json())
+          .then(restaurants => {
+            DBHelper.storeDataIndexedDB(restaurants);
+            return callback(null, restaurants);
+          })
+          .catch(err => {
+            return callback(err , null);
+          });
+      }
+    });
   }
 
   /**
@@ -242,7 +239,7 @@ class DBHelper {
    */
   static registerServiceWorker() {
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
+      window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
           .then(function(registration) {
           // Registration was successful
