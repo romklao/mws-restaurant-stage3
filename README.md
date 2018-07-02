@@ -1,16 +1,22 @@
 # Mobile Web Specialist Certification Course
 
-## Restaurant Reviews_Stage 1
+## Restaurant Reviews_Stage 2
+
+- The Restaurant Reviews projects is incrementally convert a static webpage to a mobile-ready web application. We take the responsive design we built in Stage One and connect it to an external server and retrieving data by using `fetch()` instead of local memory.
+
+- Use IndexedDB to cache JSON responses In order to maintain offline use with the development server, we update the service worker to store the JSON received by our requests using the IndexedDB API. Any page (including images) that has been visited by the user is available offline, with data pulled from the shell database.
 
 - Responsive: This project is a fully responsive that all pages elements are usable and visible in any devices, including desktop, tablet, and mobile display.
 
 - Accessible: Use the appropriate semantic elements. Appropriate ARIA roles are defined for those elements in which a semantic element is not available.
 
-- Cache the static site for offline use: Use Cache API and a Service Worker to cache the data for the website so that any page (including images) that has been visited is accessible offline.
+## How to start the server
 
-## How to Run
+Refer to https://github.com/udacity/mws-restaurant-stage-2
 
-1. Clone the project into your local `git clone git@github.com:romklao/mws-restaurant-stage-1.git`.
+## How to start the app
+
+1. Clone the project into your local `git@github.com:romklao/mws-restaurant-stage-2-update.git`.
 
 2. Get your own Google Maps API key https://developers.google.com/maps/documentation/javascript/get-api-key.
 
@@ -22,12 +28,26 @@
 
     `<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initMap"></script>`
 
-5. In a terminal, check the version of Python you have: python -V and launch a local client server using Python from your terminal:
+## How to run
 
-    * Python 2: `python -m SimpleHTTPServer 8000`
-    * Python 3: `python3 -m http.server 8000`
+1. Install glup
 
-6. Visit the site in your browser at http://localhost:8000
+```
+npm install gulp-cli -g
+```
+
+2. Install project dependencies
+
+```
+npm install
+```
+
+3. Serve the web app
+
+```
+gulp
+```
+
 
 
 
