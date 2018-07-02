@@ -228,22 +228,24 @@ class DBHelper {
     );
     return marker;
   }
-}
-
-/* Register ServiceWorker to cache data for the site
+  /* Register ServiceWorker to cache data for the site
  * to allow any page that has been visited is accessible offline
  */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('./sw.js')
-      .then(function(registration) {
-      // Registration was successful
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      }, function(err) {
-        // registration failed :(
-        console.log('ServiceWorker registration failed: ', err);
+  static registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js')
+          .then(function(registration) {
+          // Registration was successful
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }, function(err) {
+            // registration failed :(
+            console.log('ServiceWorker registration failed: ', err);
+          });
       });
-  });
+    }
+  }
 }
+
 
 export default DBHelper;
