@@ -1,4 +1,5 @@
 'use strict';
+
 var staticCacheName = 'restaurant-cache';
 var contentImgsCache = 'restaurant-content-imgs';
 var allCaches = [
