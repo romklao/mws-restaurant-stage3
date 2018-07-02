@@ -27,9 +27,9 @@ let initMap = () => {
       center: loc,
       scrollwheel: false
     });
-    updateRestaurants();
+    self.updateRestaurants();
   }
-  updateRestaurants();
+  self.updateRestaurants();
 };
 
 /**
@@ -40,8 +40,7 @@ let fetchNeighborhoods = () => {
     if (error) { // Got an error
       console.error(error);
     } else {
-      self.neighborhoods = neighborhoods;
-      fillNeighborhoodsHTML();
+      fillNeighborhoodsHTML(neighborhoods);
     }
   });
 };
@@ -49,7 +48,7 @@ let fetchNeighborhoods = () => {
 /**
  * Set neighborhoods HTML.
  */
-let fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
+let fillNeighborhoodsHTML = (neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
   neighborhoods.forEach(neighborhood => {
     const option = document.createElement('option');
@@ -68,8 +67,7 @@ let fetchCuisines = () => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      self.cuisines = cuisines;
-      fillCuisinesHTML();
+      fillCuisinesHTML(cuisines);
     }
   });
 };
@@ -77,7 +75,7 @@ let fetchCuisines = () => {
 /**
  * Set cuisines HTML.
  */
-let fillCuisinesHTML = (cuisines = self.cuisines) => {
+let fillCuisinesHTML = (cuisines) => {
   const select = document.getElementById('cuisines-select');
 
   cuisines.forEach(cuisine => {
@@ -133,7 +131,6 @@ let resetRestaurants = (restaurants) => {
   // Remove all map markers
   markers.forEach(m => m.setMap(null));
   markers = [];
-  restaurants = restaurants;
 };
 
 /**
@@ -165,8 +162,9 @@ let fillRestaurantsHTML = (restaurants) => {
 
 /**
  * Update page and map for current restaurants.
+   And make it global so the index.html can use the function
  */
-let updateRestaurants = () => {
+self.updateRestaurants = () => {
   const cSelect = document.getElementById('cuisines-select');
   const nSelect = document.getElementById('neighborhoods-select');
 
