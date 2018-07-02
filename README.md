@@ -44,7 +44,13 @@ npm install gulp-cli -g
 npm install
 ```
 
-3. Serve the web app
+3. Build your app to `dist` directory
+
+```
+gulp dist
+```
+
+4. Serve the web app
 
 ```
 gulp
