@@ -29,7 +29,7 @@ class DBHelper {
   }
   /**
    * @keep data in indexedDB after fetching it from the server
-     @param {string} restaurants - retrieved data from the server
+   * @param {string} restaurants - retrieved data from the server
    */
   static storeDataIndexedDB(restaurants) {
     let dbPromise = DBHelper.openDatabase();
