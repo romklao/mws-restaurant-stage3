@@ -1,36 +1,9 @@
 'use strict';
 var staticCacheName = 'restaurant-cache';
-var url = [
-  '/',
-  'index.html',
-  'restaurant.html',
-  'data/restaurants.json',
-  'js/main.js',
-  'js/restaurant_info.js',
-  'restaurant.html?id=1',
-  'restaurant.html?id=2',
-  'restaurant.html?id=3',
-  'restaurant.html?id=4',
-  'restaurant.html?id=5',
-  'restaurant.html?id=6',
-  'restaurant.html?id=7',
-  'restaurant.html?id=8',
-  'restaurant.html?id=9',
-  'restaurant.html?id=10',
-  'js/dbhelper.js',
-  'css/styles.css',
-  'img/1.jpg',
-  'img/2.jpg',
-  'img/3.jpg',
-  'img/4.jpg',
-  'img/5.jpg',
-  'img/6.jpg',
-  'img/7.jpg',
-  'img/8.jpg',
-  'img/9.jpg',
-  'img/10.jpg',
-  'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2',
-  'https://fonts.googleapis.com/css?family=Roboto'
+var contentImgsCache = 'restaurant-content-imgs';
+var allCaches = [
+  staticCacheName,
+  contentImgsCache
 ];
 
 /* Cache all url in the storage cache so that any page
@@ -40,8 +13,14 @@ var url = [
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
-      return cache.add(url)
-        .catch((error) => console.log('caches open : ' ,error));
+      return cache.addAll([
+        '/',
+        'js/main_bundle.js',
+        'js/restaurant_bundle.js',
+        'css/styles.css',
+        'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2',
+        'https://fonts.googleapis.com/css?family=Roboto'
+      ]);
     })
   );
 });
@@ -53,7 +32,7 @@ self.addEventListener('activate', function(event) {
       return Promise.all(
         cacheNames.filter(function(cacheName) {
           return cacheName.startsWith('restaurant-') &&
-                 cacheName != staticCacheName;
+                 !allCaches.includes(cacheName);
         })
           .map(function(cacheName) {
             return caches.delete(cacheName);
@@ -66,21 +45,39 @@ self.addEventListener('activate', function(event) {
 /* If a request doesn't match anything in the cache, get it from the network,
 send it to the page and add it to the cache at the same time.*/
 self.addEventListener('fetch', function(event) {
+  var requestUrl = new URL(event.request.url);
+
+  if (requestUrl.pathname.startsWith('/restaurants/')) {
+    return;
+  }
+
+  if (requestUrl.pathname.startsWith('/img/')) {
+    event.respondWith(servePhoto(event.request));
+    return;
+  }
+
   event.respondWith(
     caches.open(staticCacheName).then(function(cache) {
-      return cache.match(event.request).then(function(response) {
+      return cache.match(event.request).then(function (response) {
         return response || fetch(event.request).then(function(response) {
-          cache.add(event.request, response.clone());
+          cache.put(event.request, response.clone());
           return response;
         });
       });
     })
-      .catch(err => console.log(err, event.request))
   );
 });
 
-self.addEventListener('message', function(event) {
-  if (event.data.action === 'skipWaiting') {
-    self.skipWaiting();
-  }
-});
+function servePhoto(request) {
+  return caches.open(contentImgsCache).then(function(cache) {
+    return cache.match(request).then(function(response) {
+      if (response) return response;
+
+      return fetch(request).then(function(networkResponse) {
+        cache.put(request, networkResponse.clone());
+        return networkResponse;
+      });
+    });
+  });
+}
+
