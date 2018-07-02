@@ -2,13 +2,13 @@
 
 ## Restaurant Reviews_Stage 2
 
-- The Restaurant Reviews projects is incrementally convert a static webpage to a mobile-ready web application. We take the responsive design we built in Stage One and connect it to an external server and retrieving data by using `fetch()` instead of local memory.
+1. The Restaurant Reviews projects is incrementally convert a static webpage to a mobile-ready web application. We take the responsive design we built in Stage One and connect it to an external server and retrieving data by using `fetch()` instead of local memory.
 
-- Use IndexedDB to cache JSON responses In order to maintain offline use with the development server, we update the service worker to store the JSON received by our requests using the IndexedDB API. Any page (including images) that has been visited by the user is available offline, with data pulled from the shell database.
+2. Use IndexedDB to cache JSON responses In order to maintain offline use with the development server, we update the service worker to store the JSON received by our requests using the IndexedDB API. Any page (including images) that has been visited by the user is available offline, with data pulled from the shell database.
 
-- Responsive: This project is a fully responsive that all pages elements are usable and visible in any devices, including desktop, tablet, and mobile display.
+3. Responsive: This project is a fully responsive that all pages elements are usable and visible in any devices, including desktop, tablet, and mobile display.
 
-- Accessible: Use the appropriate semantic elements. Appropriate ARIA roles are defined for those elements in which a semantic element is not available.
+4. Accessible: Use the appropriate semantic elements. Appropriate ARIA roles are defined for those elements in which a semantic element is not available.
 
 ## How to start the server
 
