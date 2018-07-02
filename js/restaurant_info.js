@@ -8,6 +8,7 @@ import DBHelper from './dbhelper';
 
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
+  DBHelper.registerServiceWorker();
 });
 
 let initMap = () => {
