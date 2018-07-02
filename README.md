@@ -22,35 +22,25 @@ Refer to https://github.com/udacity/mws-restaurant-stage-2
 git@github.com:romklao/mws-restaurant-stage-2-update.git
 ```
 
-2. Get your own Google Maps API key https://developers.google.com/maps/documentation/javascript/get-api-key.
-
-3. In the index.html and restaurant.html replace the text `YOUR_GOOGLE_MAPS_API_KEY` with your own Google Maps API key.
-
-```
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initMap"></script>
-```
-
-## How to run
-
-1. Install glup
+2. Install glup
 
 ```
 npm install gulp-cli -g
 ```
 
-2. Install project dependencies
+3. Install project dependencies
 
 ```
 npm install
 ```
 
-3. Build your app to `dist` directory
+4. Build your app to `dist` directory
 
 ```
 gulp dist
 ```
 
-4. Serve the web app
+5. Serve the web app
 
 ```
 gulp
