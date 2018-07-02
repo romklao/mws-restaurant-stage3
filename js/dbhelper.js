@@ -17,7 +17,7 @@ class DBHelper {
   }
 
   /**
-   * @pen database to store data retrieved from the server in indexedDB API
+   * @open database to store data retrieved from the server in indexedDB API
    */
   static openDatabase() {
     if (!navigator.serviceWorker) {
