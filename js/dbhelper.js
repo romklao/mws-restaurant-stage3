@@ -73,26 +73,27 @@ class DBHelper {
    * @fetch all restaurants.
    */
   static fetchRestaurants(callback) {
+    //check if data exists in indexDB API if it does return callback
     DBHelper.getCachedRestaurants().then(restaurants => {
       if (restaurants.length > 0) {
-        callback(null, restaurants);
-      } else {
-        fetch(DBHelper.DATABASE_URL, {credentials: 'same-origin'})
-          .then(response => {
-            if (response.ok) {
-              return response;
-            }
-            throw new Error('Network response was not ok.');
-          })
-          .then(response => response.json())
-          .then(restaurants => {
-            DBHelper.storeDataIndexedDB(restaurants);
-            return callback(null, restaurants);
-          })
-          .catch(err => {
-            return callback(err , null);
-          });
+        return callback(null, restaurants);
       }
+      fetch(DBHelper.DATABASE_URL, {credentials: 'same-origin'})
+        .then(response => {
+          if (response.ok) {
+            return response;
+          }
+          throw new Error('Network response was not ok.');
+        })
+        .then(response => response.json())
+        .then(restaurants => {
+          //store data in indexDB API after fetching
+          DBHelper.storeDataIndexedDB(restaurants);
+          return callback(null, restaurants);
+        })
+        .catch(err => {
+          return callback(err , null);
+        });
     });
   }
 
