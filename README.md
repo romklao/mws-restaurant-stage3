@@ -2,7 +2,9 @@
 
 ## Restaurant Reviews_Stage 2
 
-<img src="img/demo-image.png" alt="restaurants reviews" height="550px" margin-left="auto" margin-right="auto" display="block">
+<div  text-align="center">
+	<img src="img/demo-image.png" alt="restaurants reviews" height="550px">
+</div>
 
 1. Retrieve Data: The Restaurant Review projects incrementally convert a static web page to a mobile-ready web application. We take the responsive design we built in Stage One and connect it to an external server and retrieving data by using `fetch ()` instead of local memory.
 
