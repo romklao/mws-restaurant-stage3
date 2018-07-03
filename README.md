@@ -2,7 +2,7 @@
 
 ## Restaurant Reviews_Stage 2
 
-<div  text-align="center">
+<div  align="center">
 	<img src="img/demo-image.png" alt="restaurants reviews" height="550px">
 </div>
 
