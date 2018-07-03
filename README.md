@@ -2,6 +2,8 @@
 
 ## Restaurant Reviews_Stage 2
 
+<img src="img/demo-image.png" alt="restaurants reviews">
+
 1. Retrieve Data: The Restaurant Review projects incrementally convert a static web page to a mobile-ready web application. We take the responsive design we built in Stage One and connect it to an external server and retrieving data by using `fetch ()` instead of local memory.
 
 2. Service Worker: Use IndexedDB to store JSON data and Cache to store URL addressable resources, for example HTML, CSS, and JS files to maintain offline use with the development server. Any page (including images) that has been visited by the user is available offline, with data pulled from the shell database.
