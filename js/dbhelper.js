@@ -13,7 +13,7 @@ class DBHelper {
    */
   static get DATABASE_URL() {
     const port = 1337;// Change this to your server port
-    return `http://localhost:${port}/restaurants`;
+    return `http://localhost:${port}`;
   }
 
   /**
@@ -78,7 +78,7 @@ class DBHelper {
       if (restaurants.length > 0) {
         return callback(null, restaurants);
       }
-      fetch(DBHelper.DATABASE_URL, {credentials: 'same-origin'})
+      fetch(`${DBHelper.DATABASE_URL}/restaurants`, {credentials: 'same-origin'})
         .then(response => {
           if (response.ok) {
             return response;
@@ -220,6 +220,42 @@ class DBHelper {
       restaurant.photograph = 10;
     }
     return (`/img/${restaurant.photograph}.jpg`);
+  }
+
+  static createRestaurantReview(review_data) {
+    console.log(review_data);
+
+    return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify(review_data),
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then(review_data => {
+        this.dbPromise.then(db => {
+          if (!db) return;
+          const tx = db.transaction('reviews', 'readwrite');
+          const store = tx.objectStore('reviews');
+          store.put(review_data);
+        });
+        return review_data;
+      })
+      .catch(error => {
+        review_data['updatedAt'] = new Date().getTime();
+        console.log('review_data', review_data);
+
+        this.dbPromise.then(db => {
+          if (!db) return;
+          const tx = db.transaction('offline-reviews', 'resdwrite');
+          const store = tx.objectStore('offline-reviews');
+          store.put(review_data);
+          console.log('Review stored offline in indexedDB');
+        });
+        return;
+      });
   }
 
   /**
