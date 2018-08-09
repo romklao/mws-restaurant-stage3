@@ -5,6 +5,7 @@ import idb from 'idb';
 /**
  * Common database helper functions.
  */
+const store_arr = ['restaurants', 'reviews', 'offline-reviews'];
 
 class DBHelper {
   /**
@@ -24,28 +25,32 @@ class DBHelper {
       return Promise.resolve();
     }
     return idb.open('restaurants', 1, (upgradeDb) => {
-      upgradeDb.createObjectStore('restaurants', { keyPath: 'id'});
+      upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
+      upgradeDb.createObjectStore('reviews', { keyPath: 'id' });
+      upgradeDb.createObjectStore('offline-reviews', { keyPath: 'updatedAt' });
     });
   }
   /**
    * @keep data in indexedDB after fetching it from the server
    * @param {string} restaurants - retrieved data from the server
    */
-  static storeDataIndexedDB(restaurants) {
+  static storeDataIndexedDB(datas, store_name) {
     let dbPromise = DBHelper.openDatabase();
+    let store = store_name + 'Store';
+
     dbPromise.then(db => {
 
       if (!db) return db;
 
-      let tx = db.transaction('restaurants', 'readwrite');
-      let restaurantsStore = tx.objectStore('restaurants');
+      let tx = db.transaction(store_name, 'readwrite');
+      store = tx.objectStore(store_name);
 
-      restaurants.forEach(restaurant => restaurantsStore.put(restaurant));
+      datas.forEach(data => store.put(data));
 
-      restaurantsStore.openCursor(null , 'prev').then(cursor => {
-        return cursor.advance(30);
+      store.openCursor(null , 'prev').then(cursor => {
+        return cursor.advance(50);
       })
-        .then(function deleteRest(cursor){
+        .then(function deleteRest(cursor) {
           if(!cursor) return;
           cursor.delete();
           return cursor.continue().then(deleteRest);
@@ -56,16 +61,17 @@ class DBHelper {
    * @get data from indexedDB if the data available after
    *  it is collected from fetching
    */
-  static getCachedRestaurants() {
+  static getCachedRestaurants(store_name) {
     let dbPromise = DBHelper.openDatabase();
+    let store = store_name + 'Store';
 
     return dbPromise.then(function(db) {
 
       if(!db) return;
 
-      let tx = db.transaction('restaurants');
-      let restaurantsStore = tx.objectStore('restaurants');
-      return restaurantsStore.getAll();
+      let tx = db.transaction(store_name);
+      store = tx.objectStore(store_name);
+      return store.getAll();
     });
   }
 
@@ -74,28 +80,54 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
     //check if data exists in indexDB API if it does return callback
-    DBHelper.getCachedRestaurants().then(restaurants => {
-      if (restaurants.length > 0) {
-        return callback(null, restaurants);
+    DBHelper.getCachedRestaurants('restaurants').then(restaurants => {
+      console.log('restaurants', restaurants);
+      if (restaurants.length === 0) {
+        fetch(`${DBHelper.DATABASE_URL}/restaurants`)
+          .then(response => {
+            if (response.ok) {
+              return response;
+            }
+            throw new Error('Network response was not ok.');
+          })
+          .then(response => response.json())
+          .then(restaurants => {
+            //store data in indexDB API after fetching
+            DBHelper.storeDataIndexedDB(restaurants, store_arr[0]);
+            return callback(null, restaurants);
+          })
+          .catch(err => {
+            return callback(err , null);
+          });
+      } else {
+        callback(null, restaurants);
       }
-      fetch(`${DBHelper.DATABASE_URL}/restaurants`, {credentials: 'same-origin'})
-        .then(response => {
-          if (response.ok) {
-            return response;
-          }
-          throw new Error('Network response was not ok.');
-        })
-        .then(response => response.json())
-        .then(restaurants => {
-          //store data in indexDB API after fetching
-          DBHelper.storeDataIndexedDB(restaurants);
-          return callback(null, restaurants);
-        })
-        .catch(err => {
-          return callback(err , null);
-        });
     });
   }
+  /**
+   * @fetch all reviews.
+   */
+  static fetchRestaurantReviews(restaurant, callback) {
+    // DBHelper.getCachedRestaurants('reviews').then(reviews => {
+    //   if (restaurant.reviews && restaurant.reviews.length > 0) {
+    //     callback(null, reviews);
+    //   }
+      fetch(`${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurant.id}`)
+        .then(response => response.json())
+        .then(reviews => {
+          console.log('reviews', reviews);
+          //store data in indexDB API after fetching
+          //DBHelper.storeDataIndexedDB(reviews, store_arr[1]);
+          callback(null, reviews);
+
+        })
+        .catch(err => {
+          callback(err , null);
+        });
+
+    //});
+  }
+
 
   /**
    * @fetch a restaurant by its ID.
@@ -223,7 +255,6 @@ class DBHelper {
   }
 
   static createRestaurantReview(review_data) {
-    console.log(review_data);
 
     return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
       method: 'POST',
@@ -231,29 +262,28 @@ class DBHelper {
       body: JSON.stringify(review_data),
       headers: {
         'content-type': 'application/json'
-      }
+      },
+      mode: 'cors',
+      redirect: 'follow',
+      referrer: 'no-referrer',
     })
       .then(response => response.json())
       .then(review_data => {
-        this.dbPromise.then(db => {
-          if (!db) return;
-          const tx = db.transaction('reviews', 'readwrite');
-          const store = tx.objectStore('reviews');
-          store.put(review_data);
-        });
+        //DBHelper.storeDataIndexedDB(review_data);
+      console.log('review_data', review_data);
         return review_data;
       })
       .catch(error => {
         review_data['updatedAt'] = new Date().getTime();
         console.log('review_data', review_data);
 
-        this.dbPromise.then(db => {
-          if (!db) return;
-          const tx = db.transaction('offline-reviews', 'resdwrite');
-          const store = tx.objectStore('offline-reviews');
-          store.put(review_data);
-          console.log('Review stored offline in indexedDB');
-        });
+        // dbPromise.then(db => {
+        //   if (!db) return;
+        //   const tx = db.transaction('offline-reviews', 'resdwrite');
+        //   const store = tx.objectStore('offline-reviews');
+        //   store.put(review_data);
+        //   console.log('Review stored offline in indexedDB');
+        // });
         return;
       });
   }
