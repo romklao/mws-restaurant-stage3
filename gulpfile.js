@@ -56,15 +56,13 @@ gulp.task('scripts:sw', function() {
  * to allow using the latest js versoin, sourcemaps, and save it to dist
  */
 gulp.task('scripts:main', function() {
-  return browserify(['js/main.js', 'js/dbhelper.js'])
+  return browserify(['js/main.js', 'js/dbhelper.js'], {debug: true})
     .transform(babelify.configure({
       presets: ['env']
     }))
     .bundle()
     .pipe(source('main_bundle.js'))
     .pipe(buffer())
-    .pipe(sourcemaps.init())
-    .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('./dist/js'));
 });
 /**
@@ -72,15 +70,13 @@ gulp.task('scripts:main', function() {
  * to allow using the latest js versoin, sourcemaps, and save it to dist
  */
 gulp.task('scripts:restaurant', function() {
-  return browserify(['js/restaurant_info.js', 'js/dbhelper.js'])
+  return browserify(['js/restaurant_info.js', 'js/dbhelper.js'], {debug: true})
     .transform(babelify.configure({
       presets: ['env']
     }))
     .bundle()
     .pipe(source('restaurant_bundle.js'))
     .pipe(buffer())
-    .pipe(sourcemaps.init())
-    .pipe(sourcemaps.write('maps')) // You need this if you want to continue using the stream with other plugins
     .pipe(gulp.dest('./dist/js'));
 });
 /**
