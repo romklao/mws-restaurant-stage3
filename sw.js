@@ -108,7 +108,7 @@ self.addEventListener('sync', function (event) {
       request.onsuccess = function () {
         // 2. POST offline reviews to network
         for (let i = 0; i < request.result.length; i++) {
-          fetch(`http://localhost:1337/reviews/`, {
+          fetch('http://localhost:1337/reviews/', {
             body: JSON.stringify(request.result[i]),
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, same-origin, *omit
