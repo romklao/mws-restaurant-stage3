@@ -239,49 +239,49 @@ class DBHelper {
     return (`/img/${restaurant.photograph}.jpg`);
   }
 
-  // static createRestaurantReview(review_data) {
+  static createRestaurantReview(review_data) {
 
-  //   return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
-  //     method: 'POST',
-  //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-  //     credentials: 'same-origin',
-  //     body: JSON.stringify(review_data),
-  //     headers: {
-  //       'content-type': 'application/json'
-  //     },
-  //     mode: 'cors',
-  //     redirect: 'follow',
-  //     referrer: 'no-referrer',
-  //   })
-  //     .then(response => {
-  //       response.json()
-  //         .then(review_data => {
-  //           let dbPromise = DBHelper.openDatabase();
+    return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
+      method: 'POST',
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin',
+      body: JSON.stringify(review_data),
+      headers: {
+        'content-type': 'application/json'
+      },
+      mode: 'cors',
+      redirect: 'follow',
+      referrer: 'no-referrer',
+    })
+      .then(response => {
+        response.json()
+          .then(review_data => {
+            let dbPromise = DBHelper.openDatabase();
 
-  //           dbPromise.then(db => {
-  //             if (!db) return;
-  //             const tx = db.transaction('reviews', 'readwrite');
-  //             const store = tx.objectStore('reviews');
-  //             store.put(review_data);
-  //           });
-  //           console.log('review_data', review_data);
-  //           return review_data;
-  //         });
-  //     })
-  //     .catch(error => {
-  //       let dbPromise = DBHelper.openDatabase();
-  //       review_data['updatedAt'] = new Date().getTime();
-  //       console.log('review_data', review_data);
+            dbPromise.then(db => {
+              if (!db) return;
+              const tx = db.transaction('reviews', 'readwrite');
+              const store = tx.objectStore('reviews');
+              store.put(review_data);
+            });
+            console.log('review_data', review_data);
+            return review_data;
+          });
+      })
+      .catch(error => {
+        let dbPromise = DBHelper.openDatabase();
+        review_data['updatedAt'] = new Date().getTime();
+        console.log('review_data', review_data);
 
-  //       dbPromise.then(db => {
-  //         if (!db) return;
-  //         const tx = db.transaction('offline-reviews', 'resdwrite');
-  //         const store = tx.objectStore('offline-reviews');
-  //         store.put(review_data);
-  //       });
-  //       return;
-  //     });
-  // }
+        dbPromise.then(db => {
+          if (!db) return;
+          const tx = db.transaction('offline-reviews', 'resdwrite');
+          const store = tx.objectStore('offline-reviews');
+          store.put(review_data);
+        });
+        return;
+      });
+  }
 
 
   /**
