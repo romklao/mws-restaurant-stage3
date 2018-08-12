@@ -5,7 +5,6 @@ import idb from 'idb';
 /**
  * Common database helper functions.
  */
-const store_arr = ['restaurants', 'reviews', 'offline-reviews'];
 
 class DBHelper {
   /**
@@ -23,12 +22,13 @@ class DBHelper {
   static openDatabase() {
     if (!navigator.serviceWorker) {
       return Promise.resolve();
+    } else {
+      return idb.open('restaurants', 1, (upgradeDb) => {
+        upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
+        upgradeDb.createObjectStore('reviews', { keyPath: 'id' });
+        upgradeDb.createObjectStore('offline-reviews', { keyPath: 'updatedAt' });
+      });
     }
-    return idb.open('restaurants', 1, (upgradeDb) => {
-      upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
-      upgradeDb.createObjectStore('reviews', { keyPath: 'id' });
-      upgradeDb.createObjectStore('offline-reviews', { keyPath: 'updatedAt' });
-    });
   }
   /**
    * @keep data in indexedDB after fetching it from the server
@@ -36,19 +36,16 @@ class DBHelper {
    */
   static storeDataIndexedDB(datas, store_name) {
     let dbPromise = DBHelper.openDatabase();
-    let store = store_name + 'Store';
-
     dbPromise.then(db => {
-
       if (!db) return db;
 
       let tx = db.transaction(store_name, 'readwrite');
-      store = tx.objectStore(store_name);
+      let store = tx.objectStore(store_name);
 
       datas.forEach(data => store.put(data));
 
       store.openCursor(null , 'prev').then(cursor => {
-        return cursor.advance(50);
+        return cursor.advance(150);
       })
         .then(function deleteRest(cursor) {
           if(!cursor) return;
@@ -61,16 +58,12 @@ class DBHelper {
    * @get data from indexedDB if the data available after
    *  it is collected from fetching
    */
-  static getCachedRestaurants(store_name) {
+  static getCachedIndexedDB(store_name) {
     let dbPromise = DBHelper.openDatabase();
-    let store = store_name + 'Store';
-
     return dbPromise.then(function(db) {
-
       if(!db) return;
-
       let tx = db.transaction(store_name);
-      store = tx.objectStore(store_name);
+      let store = tx.objectStore(store_name);
       return store.getAll();
     });
   }
@@ -80,20 +73,14 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
     //check if data exists in indexDB API if it does return callback
-    DBHelper.getCachedRestaurants('restaurants').then(restaurants => {
+    DBHelper.getCachedIndexedDB('restaurants').then(restaurants => {
       console.log('restaurants', restaurants);
       if (restaurants.length === 0) {
         fetch(`${DBHelper.DATABASE_URL}/restaurants`)
-          .then(response => {
-            if (response.ok) {
-              return response;
-            }
-            throw new Error('Network response was not ok.');
-          })
           .then(response => response.json())
           .then(restaurants => {
             //store data in indexDB API after fetching
-            DBHelper.storeDataIndexedDB(restaurants, store_arr[0]);
+            DBHelper.storeDataIndexedDB(restaurants, 'restaurants');
             return callback(null, restaurants);
           })
           .catch(err => {
@@ -108,26 +95,24 @@ class DBHelper {
    * @fetch all reviews.
    */
   static fetchRestaurantReviews(restaurant, callback) {
-    // DBHelper.getCachedRestaurants('reviews').then(reviews => {
-    //   if (restaurant.reviews && restaurant.reviews.length > 0) {
-    //     callback(null, reviews);
-    //   }
-      fetch(`${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurant.id}`)
-        .then(response => response.json())
-        .then(reviews => {
-          console.log('reviews', reviews);
-          //store data in indexDB API after fetching
-          //DBHelper.storeDataIndexedDB(reviews, store_arr[1]);
-          callback(null, reviews);
-
-        })
-        .catch(err => {
-          callback(err , null);
-        });
-
-    //});
+    DBHelper.getCachedIndexedDB('reviews').then(results => {
+      if (restaurant.results && restaurant.results.length > 0) {
+        callback(null, results);
+      } else {
+        fetch(`${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurant.id}`)
+          .then(response => response.json())
+          .then(reviews => {
+            console.log('reviews', reviews);
+            //store data in indexDB API after fetching
+            DBHelper.storeDataIndexedDB(reviews, 'reviews');
+            callback(null, reviews);
+          })
+          .catch(err => {
+            callback(err , null);
+          });
+      }
+    });
   }
-
 
   /**
    * @fetch a restaurant by its ID.
@@ -254,39 +239,50 @@ class DBHelper {
     return (`/img/${restaurant.photograph}.jpg`);
   }
 
-  static createRestaurantReview(review_data) {
+  // static createRestaurantReview(review_data) {
 
-    return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
-      method: 'POST',
-      credentials: 'same-origin',
-      body: JSON.stringify(review_data),
-      headers: {
-        'content-type': 'application/json'
-      },
-      mode: 'cors',
-      redirect: 'follow',
-      referrer: 'no-referrer',
-    })
-      .then(response => response.json())
-      .then(review_data => {
-        //DBHelper.storeDataIndexedDB(review_data);
-      console.log('review_data', review_data);
-        return review_data;
-      })
-      .catch(error => {
-        review_data['updatedAt'] = new Date().getTime();
-        console.log('review_data', review_data);
+  //   return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
+  //     method: 'POST',
+  //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+  //     credentials: 'same-origin',
+  //     body: JSON.stringify(review_data),
+  //     headers: {
+  //       'content-type': 'application/json'
+  //     },
+  //     mode: 'cors',
+  //     redirect: 'follow',
+  //     referrer: 'no-referrer',
+  //   })
+  //     .then(response => {
+  //       response.json()
+  //         .then(review_data => {
+  //           let dbPromise = DBHelper.openDatabase();
 
-        // dbPromise.then(db => {
-        //   if (!db) return;
-        //   const tx = db.transaction('offline-reviews', 'resdwrite');
-        //   const store = tx.objectStore('offline-reviews');
-        //   store.put(review_data);
-        //   console.log('Review stored offline in indexedDB');
-        // });
-        return;
-      });
-  }
+  //           dbPromise.then(db => {
+  //             if (!db) return;
+  //             const tx = db.transaction('reviews', 'readwrite');
+  //             const store = tx.objectStore('reviews');
+  //             store.put(review_data);
+  //           });
+  //           console.log('review_data', review_data);
+  //           return review_data;
+  //         });
+  //     })
+  //     .catch(error => {
+  //       let dbPromise = DBHelper.openDatabase();
+  //       review_data['updatedAt'] = new Date().getTime();
+  //       console.log('review_data', review_data);
+
+  //       dbPromise.then(db => {
+  //         if (!db) return;
+  //         const tx = db.transaction('offline-reviews', 'resdwrite');
+  //         const store = tx.objectStore('offline-reviews');
+  //         store.put(review_data);
+  //       });
+  //       return;
+  //     });
+  // }
+
 
   /**
    * @Map marker for a restaurant.
@@ -297,28 +293,72 @@ class DBHelper {
       title: restaurant.name,
       url: DBHelper.urlForRestaurant(restaurant),
       map: map,
-      animation: google.maps.Animation.DROP}
-    );
+      animation: google.maps.Animation.DROP
+    });
     return marker;
   }
-  /* @register ServiceWorker to cache data for the site
+
+}
+
+/* @register ServiceWorker to cache data for the site
    * to allow any page that has been visited is accessible offline
    */
-  static registerServiceWorker() {
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(function(registration) {
-          // Registration was successful
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          }, function(err) {
-            // registration failed :(
-            console.log('ServiceWorker registration failed: ', err);
-          });
-      });
-    }
-  }
-}
+
+// navigator.serviceWorker.register('./sw.js').then(function(reg) {
+//   // Registration was successful
+//   console.log('ServiceWorker registration successful with scope: ', reg.scope);
+//   if (!navigator.serviceWorker.controller) {
+//     return;
+//   }
+//   if (reg.waiting) {
+//     navigator.serviceWorker.controller.postMessage(
+//       {action: 'skipWaiting'}
+//     );
+//   }
+//   if (reg.installing) {
+//     navigator.serviceWorker.addEventListener('stateChange', function () {
+//       if (navigator.serviceWorker.controller.state == 'installed') {
+//         navigator.serviceWorker.controller.postMessage(
+//           {action: 'skipWaiting'}
+//         );
+//       }
+//     });
+//   }
+//   reg.addEventListener('updatefound', function () {
+//     navigator.serviceWorker.addEventListener('stateChange', function () {
+//       if (navigator.serviceWorker.controller.state == 'installed') {
+//         navigator.serviceWorker.controller.postMessage(
+//           {action: 'skipWaiting'}
+//         );
+//       }
+//     });
+//   });
+// }).catch(function () {
+//   console.log('Service worker registration failed');
+// });
+
+
+// var refreshing;
+// navigator.serviceWorker.addEventListener('controllerchange', function () {
+//   if (refreshing) return;
+//   //window.location.reload();
+//   refreshing = true;
+// });
+
+// navigator.serviceWorker.ready.then(function (swRegistration) {
+//   return swRegistration.sync.register('myFirstSync');
+// });
+
+// function onOnline() {
+//   console.log('Going online');
+// }
+
+// function onOffline() {
+//   console.log('Going offline');
+// }
+
+// window.addEventListener('online', onOnline);
+// window.addEventListener('offline', onOffline);
 
 
 export default DBHelper;
