@@ -4,8 +4,9 @@ var staticCacheName = 'restaurant-cache';
 var contentImgsCache = 'restaurant-content-imgs';
 var allCaches = [
   staticCacheName,
-  contentImgsCache
+  contentImgsCache,
 ];
+
 
 /* Cache all url in the storage cache so that any page
  * that has been visited is accessible offline
@@ -48,7 +49,10 @@ send it to the page and add it to the cache at the same time.*/
 self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
 
-  if (requestUrl.pathname.startsWith('/restaurants/')) {
+  // Don't use service worker caches for IndexDB based
+  // data.
+  if (requestUrl.pathname.startsWith('/restaurants/') ||
+      requestUrl.pathname.startsWith('/reviews/')) {
     return;
   }
 
@@ -61,12 +65,22 @@ self.addEventListener('fetch', function(event) {
     caches.open(staticCacheName).then(function(cache) {
       return cache.match(event.request).then(function (response) {
         return response || fetch(event.request).then(function(response) {
-          cache.put(event.request, response.clone());
+          cache.put(event.request.url, response.clone());
           return response;
         });
       });
     })
+      .catch(error => {
+        console.log('Error', error);
+      })
   );
+});
+
+self.addEventListener('message', (event) => {
+  console.log('event', event);
+  if (event.data.action == 'skipWaiting') {
+    self.skipWaiting();
+  }
 });
 
 function servePhoto(request) {
@@ -81,4 +95,64 @@ function servePhoto(request) {
     });
   });
 }
+
+self.addEventListener('sync', function (event) {
+  if (event.tag == 'myFirstSync') {
+    const DBOpenRequest = indexedDB.open('restaurants', 1);
+    DBOpenRequest.onsuccess = function (e) {
+      let db = DBOpenRequest.result;
+      let tx = db.transaction('offline-reviews', 'readwrite');
+      let store = tx.objectStore('offline-reviews');
+      // 1. Get submitted reviews while offline
+      let request = store.getAll();
+      request.onsuccess = function () {
+        // 2. POST offline reviews to network
+        for (let i = 0; i < request.result.length; i++) {
+          fetch(`http://localhost:1337/reviews/`, {
+            body: JSON.stringify(request.result[i]),
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, same-origin, *omit
+            headers: {
+              'content-type': 'application/json'
+            },
+            method: 'POST',
+            mode: 'cors', // no-cors, cors, *same-origin
+            redirect: 'follow', // *manual, follow, error
+            referrer: 'no-referrer', // *client, no-referrer
+          })
+            .then(response => {
+              return response.json();
+            })
+            .then(data => {
+              let tx = db.transaction('reviews', 'readwrite');
+              let store = tx.objectStore('reviews');
+              let request = store.add(data);
+              request.onsuccess = function (data) {
+                //TODO: add data (= one review) to view
+                let tx = db.transaction('offline-reviews', 'readwrite');
+                let store = tx.objectStore('offline-reviews');
+                let request = store.clear();
+                request.onsuccess = function () { };
+                request.onerror = function (error) {
+                  console.log('Unable to clear offline-reviews objectStore', error);
+                };
+              };
+              request.onerror = function (error) {
+                console.log('Unable to add objectStore to IDB', error);
+              };
+            })
+            .catch(error => {
+              console.log('Unable to make a POST fetch', error);
+            });
+        }
+      };
+      request.onerror = function (e) {
+        console.log(e);
+      };
+    };
+    DBOpenRequest.onerror = function (e) {
+      console.log(e);
+    };
+  }
+});
 
