@@ -304,61 +304,61 @@ class DBHelper {
    * to allow any page that has been visited is accessible offline
    */
 
-// navigator.serviceWorker.register('./sw.js').then(function(reg) {
-//   // Registration was successful
-//   console.log('ServiceWorker registration successful with scope: ', reg.scope);
-//   if (!navigator.serviceWorker.controller) {
-//     return;
-//   }
-//   if (reg.waiting) {
-//     navigator.serviceWorker.controller.postMessage(
-//       {action: 'skipWaiting'}
-//     );
-//   }
-//   if (reg.installing) {
-//     navigator.serviceWorker.addEventListener('stateChange', function () {
-//       if (navigator.serviceWorker.controller.state == 'installed') {
-//         navigator.serviceWorker.controller.postMessage(
-//           {action: 'skipWaiting'}
-//         );
-//       }
-//     });
-//   }
-//   reg.addEventListener('updatefound', function () {
-//     navigator.serviceWorker.addEventListener('stateChange', function () {
-//       if (navigator.serviceWorker.controller.state == 'installed') {
-//         navigator.serviceWorker.controller.postMessage(
-//           {action: 'skipWaiting'}
-//         );
-//       }
-//     });
-//   });
-// }).catch(function () {
-//   console.log('Service worker registration failed');
-// });
+navigator.serviceWorker.register('./sw.js').then(function(reg) {
+  // Registration was successful
+  console.log('ServiceWorker registration successful with scope: ', reg.scope);
+  if (!navigator.serviceWorker.controller) {
+    return;
+  }
+  if (reg.waiting) {
+    navigator.serviceWorker.controller.postMessage(
+      {action: 'skipWaiting'}
+    );
+  }
+  if (reg.installing) {
+    navigator.serviceWorker.addEventListener('stateChange', function () {
+      if (navigator.serviceWorker.controller.state == 'installed') {
+        navigator.serviceWorker.controller.postMessage(
+          {action: 'skipWaiting'}
+        );
+      }
+    });
+  }
+  reg.addEventListener('updatefound', function () {
+    navigator.serviceWorker.addEventListener('stateChange', function () {
+      if (navigator.serviceWorker.controller.state == 'installed') {
+        navigator.serviceWorker.controller.postMessage(
+          {action: 'skipWaiting'}
+        );
+      }
+    });
+  });
+}).catch(function () {
+  console.log('Service worker registration failed');
+});
 
 
-// var refreshing;
-// navigator.serviceWorker.addEventListener('controllerchange', function () {
-//   if (refreshing) return;
-//   //window.location.reload();
-//   refreshing = true;
-// });
+var refreshing;
+navigator.serviceWorker.addEventListener('controllerchange', function () {
+  if (refreshing) return;
+  //window.location.reload();
+  refreshing = true;
+});
 
-// navigator.serviceWorker.ready.then(function (swRegistration) {
-//   return swRegistration.sync.register('myFirstSync');
-// });
+navigator.serviceWorker.ready.then(function (swRegistration) {
+  return swRegistration.sync.register('myFirstSync');
+});
 
-// function onOnline() {
-//   console.log('Going online');
-// }
+function onOnline() {
+  console.log('Going online');
+}
 
-// function onOffline() {
-//   console.log('Going offline');
-// }
+function onOffline() {
+  console.log('Going offline');
+}
 
-// window.addEventListener('online', onOnline);
-// window.addEventListener('offline', onOffline);
+window.addEventListener('online', onOnline);
+window.addEventListener('offline', onOffline);
 
 
 export default DBHelper;
