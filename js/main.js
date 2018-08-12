@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMap();
   fetchNeighborhoods();
   fetchCuisines();
-  DBHelper.registerServiceWorker();
+  //DBHelper.registerServiceWorker();
 });
 
 /**
@@ -132,6 +132,7 @@ let resetRestaurants = (restaurants) => {
   // Remove all map markers
   markers.forEach(m => m.setMap(null));
   markers = [];
+  self.restaurants = restaurants;
 };
 
 /**
@@ -184,3 +185,4 @@ self.updateRestaurants = () => {
     }
   });
 };
+
