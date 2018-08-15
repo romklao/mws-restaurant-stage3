@@ -23,96 +23,100 @@ class DBHelper {
     if (!navigator.serviceWorker) {
       return Promise.resolve();
     } else {
-      return idb.open('restaurants', 1, (upgradeDb) => {
+      return idb.open('restaurants', 3, (upgradeDb) => {
         upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
-        upgradeDb.createObjectStore('reviews', { keyPath: 'id' });
+        let reviewStore = upgradeDb.createObjectStore('reviews', { keyPath: 'id' });
+        reviewStore.createIndex('restaurant_id', 'restaurant_id', {unique: false});
         upgradeDb.createObjectStore('offline-reviews', { keyPath: 'updatedAt' });
       });
     }
   }
-  /**
-   * @keep data in indexedDB after fetching it from the server
-   * @param {string} restaurants - retrieved data from the server
-   */
-  static storeDataIndexedDB(datas, store_name) {
-    let dbPromise = DBHelper.openDatabase();
-    dbPromise.then(db => {
-      if (!db) return db;
 
-      let tx = db.transaction(store_name, 'readwrite');
-      let store = tx.objectStore(store_name);
+  // static getCachedIndexedDB(store_name) {
+  //   let dbPromise = DBHelper.openDatabase();
 
-      datas.forEach(data => store.put(data));
+  //   return dbPromise.then(function(db) {
+  //     if(!db) return;
+  //     let tx = db.transaction(store_name);
+  //     let store = tx.objectStore(store_name);
+  //     return store.getAll();
+  //   });
+  // }
 
-      store.openCursor(null , 'prev').then(cursor => {
-        return cursor.advance(150);
-      })
-        .then(function deleteRest(cursor) {
-          if(!cursor) return;
-          cursor.delete();
-          return cursor.continue().then(deleteRest);
-        });
-    });
-  }
-  /**
-   * @get data from indexedDB if the data available after
-   *  it is collected from fetching
-   */
-  static getCachedIndexedDB(store_name) {
-    let dbPromise = DBHelper.openDatabase();
-    return dbPromise.then(function(db) {
-      if(!db) return;
-      let tx = db.transaction(store_name);
-      let store = tx.objectStore(store_name);
-      return store.getAll();
-    });
-  }
+  // static storeDataIndexedDb(datas, store_name) {
+  //   let dbPromise = DBHelper.openDatabase();
 
+  //   dbPromise.then(db => {
+  //     if (!db) return;
+  //     const tx = db.transaction(store_name, 'readwrite');
+  //     const store = tx.objectStore(store_name);
+
+  //     if (datas.length > 1) {
+  //       datas.forEach(data => {
+  //         store.put(data);
+  //       });
+  //     } else {
+  //       store.put(datas);
+  //     }
+  //   });
+  // }
   /**
    * @fetch all restaurants.
    */
-  static fetchRestaurants(callback) {
-    //check if data exists in indexDB API if it does return callback
-    DBHelper.getCachedIndexedDB('restaurants').then(restaurants => {
-      console.log('restaurants', restaurants);
-      if (restaurants.length === 0) {
-        fetch(`${DBHelper.DATABASE_URL}/restaurants`)
-          .then(response => response.json())
-          .then(restaurants => {
-            //store data in indexDB API after fetching
-            DBHelper.storeDataIndexedDB(restaurants, 'restaurants');
-            return callback(null, restaurants);
-          })
-          .catch(err => {
-            return callback(err , null);
-          });
-      } else {
-        callback(null, restaurants);
-      }
-    });
-  }
+  // static fetchRestaurants(callback) {
+  //   //check if data exists in indexDB API if it does return callback
+  //   DBHelper.getCachedIndexedDB('restaurants').then(results => {
+  //     if (results && results.length > 0) {
+  //       callback(null, results);
+  //     }
+  //     fetch(`${DBHelper.DATABASE_URL}/restaurants`)
+  //       .then(response => response.json())
+  //       .then(restaurants => {
+  //         //store data in indexDB API after fetching
+  //         DBHelper.storeDataIndexedDb(restaurants, 'restaurants');
+  //         callback(null, restaurants);
+  //       })
+  //       .catch(err => {
+  //         callback(err , null);
+  //       });
+  //   });
+  // }
   /**
    * @fetch all reviews.
    */
-  static fetchRestaurantReviews(restaurant, callback) {
-    DBHelper.getCachedIndexedDB('reviews').then(results => {
-      if (restaurant.results && restaurant.results.length > 0) {
-        callback(null, results);
-      } else {
-        fetch(`${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurant.id}`)
-          .then(response => response.json())
-          .then(reviews => {
-            console.log('reviews', reviews);
-            //store data in indexDB API after fetching
-            DBHelper.storeDataIndexedDB(reviews, 'reviews');
-            callback(null, reviews);
-          })
-          .catch(err => {
-            callback(err , null);
-          });
-      }
-    });
-  }
+  // static fetchRestaurantReviews(restaurant, callback) {
+  //   let dbPromise = DBHelper.openDatabase();
+
+  //   dbPromise.then(db => {
+  //     if (!db) return;
+  //     const tx = db.transaction('reviews');
+  //     const store = tx.objectStore('reviews');
+  //     const index = store.index('restaurant_id');
+
+  //     index.getAll(restaurant.id).then(results => {
+  //       console.log('reviews', results);
+  //       callback(null, results);
+
+  //       if (!navigator.onLine) {
+  //         return;
+  //       }
+
+  //       fetch(`${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurant.id}`)
+  //         .then(response => {
+  //           return response.json();
+  //         })
+  //         .then(reviews => {
+  //           console.log('reviews2', reviews);
+  //           //store data in indexDB API after fetching
+  //           DBHelper.storeDataIndexedDb(reviews, 'reviews');
+  //           callback(null, reviews);
+  //         })
+  //         .catch(err => {
+  //           callback(err , null);
+  //         });
+  //     });
+  //   });
+  // }
 
   /**
    * @fetch a restaurant by its ID.
@@ -239,50 +243,72 @@ class DBHelper {
     return (`/img/${restaurant.photograph}.jpg`);
   }
 
-  static createRestaurantReview(review_data) {
+  // static showMessage() {
+  //   let modal = document.getElementById('modal-overlay');
+  //   modal.style.display = 'block';
 
-    return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
-      method: 'POST',
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin',
-      body: JSON.stringify(review_data),
-      headers: {
-        'content-type': 'application/json'
-      },
-      mode: 'cors',
-      redirect: 'follow',
-      referrer: 'no-referrer',
-    })
-      .then(response => {
-        response.json()
-          .then(review_data => {
-            let dbPromise = DBHelper.openDatabase();
+  //   let button = document.getElementById('bttn-close');
+  //   button.addEventListener('click', function() {
+  //     modal.style.display = 'none';
+  //   });
+  // }
 
-            dbPromise.then(db => {
-              if (!db) return;
-              const tx = db.transaction('reviews', 'readwrite');
-              const store = tx.objectStore('reviews');
-              store.put(review_data);
-            });
-            console.log('review_data', review_data);
-            return review_data;
-          });
-      })
-      .catch(error => {
-        let dbPromise = DBHelper.openDatabase();
-        review_data['updatedAt'] = new Date().getTime();
-        console.log('review_data', review_data);
+  // static createRestaurantReview(review_data) {
 
-        dbPromise.then(db => {
-          if (!db) return;
-          const tx = db.transaction('offline-reviews', 'resdwrite');
-          const store = tx.objectStore('offline-reviews');
-          store.put(review_data);
-        });
-        return;
-      });
-  }
+  //   return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
+  //     method: 'POST',
+  //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+  //     credentials: 'same-origin',
+  //     body: JSON.stringify(review_data),
+  //     headers: {
+  //       'content-type': 'application/json'
+  //     },
+  //     mode: 'cors',
+  //     redirect: 'follow',
+  //     referrer: 'no-referrer',
+  //   })
+  //     .then(response => {
+  //       response.json()
+  //         .then(review_data => {
+  //           console.log('review_stored', review_data);
+  //           DBHelper.storeDataIndexedDb(review_data, 'reviews');
+  //           return review_data;
+  //         });
+  //     })
+  //     .catch(error => {
+  //       review_data['updatedAt'] = new Date().getTime();
+  //       console.log('review_data', review_data);
 
+  //       DBHelper.storeDataIndexedDb(review_data, 'offline-reviews');
+  //       console.log('Review stored offline in IDB');
+  //       return;
+  //     });
+  // }
+
+  // static clearOfflineReviews() {
+  //   let dbPromise = DBHelper.openDatabase();
+  //   dbPromise.then(db => {
+  //     const tx = db.transaction('offline-reviews', 'readwrite');
+  //     const store = tx.objectStore('offline-reviews');
+  //     store.clear();
+  //   });
+  //   return;
+  // }
+
+  // static createOfflineReview() {
+  //   DBHelper.openDatabase().then(db => {
+  //     if (!db) return;
+  //     const tx = db.transaction('offline-reviews', 'readwrite');
+  //     const store = tx.objectStore('offline-reviews');
+  //     store.getAll().then(offlineReviews => {
+  //       console.log('offlineReviews', offlineReviews);
+  //       offlineReviews.forEach(review => {
+  //         DBHelper.createRestaurantReview(review);
+  //       });
+  //       DBHelper.clearOfflineReviews();
+  //     });
+  //   });
+  // }
 
   /**
    * @Map marker for a restaurant.
@@ -297,13 +323,26 @@ class DBHelper {
     });
     return marker;
   }
-
 }
+
+/* create these functions to add online status to the browser
+ * when it is offline it will store review submition into offline-reviews IndexedDB
+*/
+function onGoOnline() {
+  console.log('Going online');
+  DBHelper.createOfflineReview();
+}
+
+function onGoOffline() {
+  console.log('Going offline');
+}
+
+window.addEventListener('online', onGoOnline);
+window.addEventListener('offline', onGoOffline);
 
 /* @register ServiceWorker to cache data for the site
    * to allow any page that has been visited is accessible offline
    */
-
 navigator.serviceWorker.register('./sw.js').then(function(reg) {
   // Registration was successful
   console.log('ServiceWorker registration successful with scope: ', reg.scope);
@@ -311,54 +350,38 @@ navigator.serviceWorker.register('./sw.js').then(function(reg) {
     return;
   }
   if (reg.waiting) {
-    navigator.serviceWorker.controller.postMessage(
-      {action: 'skipWaiting'}
-    );
+    _updateReady(reg.waiting);
+    return;
   }
   if (reg.installing) {
-    navigator.serviceWorker.addEventListener('stateChange', function () {
-      if (navigator.serviceWorker.controller.state == 'installed') {
-        navigator.serviceWorker.controller.postMessage(
-          {action: 'skipWaiting'}
-        );
-      }
-    });
+    _trackInstalling(reg.installing);
+    return;
   }
+
   reg.addEventListener('updatefound', function () {
-    navigator.serviceWorker.addEventListener('stateChange', function () {
-      if (navigator.serviceWorker.controller.state == 'installed') {
-        navigator.serviceWorker.controller.postMessage(
-          {action: 'skipWaiting'}
-        );
-      }
-    });
+    _trackInstalling(reg.installing);
+  });
+
+  var refreshing;
+  navigator.serviceWorker.addEventListener('controllerchange', function () {
+    if (refreshing) return;
+    refreshing = true;
   });
 }).catch(function () {
   console.log('Service worker registration failed');
 });
 
-
-var refreshing;
-navigator.serviceWorker.addEventListener('controllerchange', function () {
-  if (refreshing) return;
-  //window.location.reload();
-  refreshing = true;
-});
-
-navigator.serviceWorker.ready.then(function (swRegistration) {
-  return swRegistration.sync.register('myFirstSync');
-});
-
-function onOnline() {
-  console.log('Going online');
+function _updateReady(worker) {
+  worker.postMessage({action: 'skipWaiting'});
 }
 
-function onOffline() {
-  console.log('Going offline');
+function _trackInstalling(worker) {
+  let indexController = this;
+  worker.addEventListener('stateChange', function() {
+    if (worker.state == 'installed') {
+      indexController._updateReady(worker);
+    }
+  });
 }
-
-window.addEventListener('online', onOnline);
-window.addEventListener('offline', onOffline);
-
 
 export default DBHelper;
