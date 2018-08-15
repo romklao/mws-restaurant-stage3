@@ -281,7 +281,6 @@ class DBHelper {
         response.json()
           .then(review_data => {
           /* keep datas in IndexedDB after posting data to the server when online */
-            console.log('review_stored', review_data);
             DBHelper.storeDataIndexedDb([review_data], 'reviews');
             return review_data;
           });
