@@ -3,7 +3,7 @@
 import DBHelper from './dbhelper';
 
 /**
- * Initialize Google map, called from HTML.
+ * @initialize Google map, called from HTML.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -34,7 +34,7 @@ window.gm_authFailure = () => {
 };
 
 /**
- * Add restaurant name to the breadcrumb navigation menu
+ * @add restaurant name to the breadcrumb navigation menu
  */
 let fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
@@ -53,7 +53,7 @@ let fillBreadcrumb = (restaurant = self.restaurant) => {
 };
 
 /**
- * Get a parameter by name from page URL.
+ * @get a parameter by name from page URL.
  */
 let getParameterByName = (name, url) => {
   if (!url)
@@ -69,7 +69,7 @@ let getParameterByName = (name, url) => {
 };
 
 /**
- * Get current restaurant from page URL.
+ * @get current restaurant from page URL.
  */
 let fetchRestaurantFromURL = (callback) => {
   if (self.restaurant) { // restaurant already fetched!
@@ -101,7 +101,7 @@ let fetchRestaurantFromURL = (callback) => {
 };
 
 /**
- * Create restaurant HTML and add it to the webpage
+ * @create restaurant HTML and add it to the webpage
  */
 let fillRestaurantHTML = (restaurant) => {
   const name = document.getElementById('restaurant-name');
@@ -129,7 +129,7 @@ let fillRestaurantHTML = (restaurant) => {
 };
 
 /**
- * Create restaurant operating hours HTML table and add it to the webpage.
+ * @create restaurant operating hours HTML table and add it to the webpage.
  */
 let fillRestaurantHoursHTML = (operatingHours) => {
   const hours = document.getElementById('restaurant-hours');
@@ -156,7 +156,7 @@ let fillRestaurantHoursHTML = (operatingHours) => {
 };
 
 /**
- * Create all reviews HTML and add them to the webpage.
+ * @create all reviews HTML and add them to the webpage.
  */
 let fillReviewsHTML = (reviews) => {
   const container = document.getElementById('reviews-container');
@@ -177,7 +177,6 @@ let fillReviewsHTML = (reviews) => {
     container.appendChild(noReviews);
     return;
   }
-  //const ul = document.getElementById('reviews-list');
 
   let sortedReviews = reviews.sort(function(a, b) {
     return new Date(b.updatedAt) - new Date(a.updatedAt);
@@ -190,7 +189,7 @@ let fillReviewsHTML = (reviews) => {
 };
 
 /**
- * Create review HTML and add it to the webpage.
+ * @create review HTML and add it to the webpage.
  */
 let createReviewHTML = (review) => {
   const li = document.createElement('li');
@@ -224,7 +223,9 @@ let createReviewHTML = (review) => {
   return li;
 };
 
-// Add review
+/**
+ * @submit the form, send to the server, and show it on a page
+ */
 
 const form = document.getElementById('review-form');
 
