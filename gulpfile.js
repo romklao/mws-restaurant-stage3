@@ -53,7 +53,7 @@ gulp.task('scripts:sw', function() {
 });
 /**
  * @copy javascript file (main page), transpiler by using browserify
- * to allow using the latest js versoin, sourcemaps, and save it to dist
+ * to allow using the latest js version, debug, and save it to dist
  */
 gulp.task('scripts:main', function() {
   return browserify(['js/main.js', 'js/dbhelper.js'], {debug: true})
@@ -67,7 +67,7 @@ gulp.task('scripts:main', function() {
 });
 /**
  * @copy javascript file(restaurant page), transpiler by using browserify
- * to allow using the latest js versoin, sourcemaps, and save it to dist
+ * to allow using the latest js version, debug, and save it to dist
  */
 gulp.task('scripts:restaurant', function() {
   return browserify(['js/restaurant_info.js', 'js/dbhelper.js'], {debug: true})
