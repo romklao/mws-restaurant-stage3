@@ -253,37 +253,37 @@ class DBHelper {
   //   });
   // }
 
-  // static createRestaurantReview(review_data) {
+  static createRestaurantReview(review_data) {
 
-  //   return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
-  //     method: 'POST',
-  //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-  //     credentials: 'same-origin',
-  //     body: JSON.stringify(review_data),
-  //     headers: {
-  //       'content-type': 'application/json'
-  //     },
-  //     mode: 'cors',
-  //     redirect: 'follow',
-  //     referrer: 'no-referrer',
-  //   })
-  //     .then(response => {
-  //       response.json()
-  //         .then(review_data => {
-  //           console.log('review_stored', review_data);
-  //           DBHelper.storeDataIndexedDb(review_data, 'reviews');
-  //           return review_data;
-  //         });
-  //     })
-  //     .catch(error => {
-  //       review_data['updatedAt'] = new Date().getTime();
-  //       console.log('review_data', review_data);
+    return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
+      method: 'POST',
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin',
+      body: JSON.stringify(review_data),
+      headers: {
+        'content-type': 'application/json'
+      },
+      mode: 'cors',
+      redirect: 'follow',
+      referrer: 'no-referrer',
+    })
+      .then(response => {
+        response.json()
+          .then(review_data => {
+            console.log('review_stored', review_data);
+            DBHelper.storeDataIndexedDb(review_data, 'reviews');
+            return review_data;
+          });
+      })
+      .catch(error => {
+        review_data['updatedAt'] = new Date().getTime();
+        console.log('review_data', review_data);
 
-  //       DBHelper.storeDataIndexedDb(review_data, 'offline-reviews');
-  //       console.log('Review stored offline in IDB');
-  //       return;
-  //     });
-  // }
+        DBHelper.storeDataIndexedDb(review_data, 'offline-reviews');
+        console.log('Review stored offline in IDB');
+        return;
+      });
+  }
 
   // static clearOfflineReviews() {
   //   let dbPromise = DBHelper.openDatabase();
