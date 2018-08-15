@@ -43,23 +43,23 @@ class DBHelper {
     });
   }
 
-  // static storeDataIndexedDb(datas, store_name) {
-  //   let dbPromise = DBHelper.openDatabase();
+  static storeDataIndexedDb(datas, store_name) {
+    let dbPromise = DBHelper.openDatabase();
 
-  //   dbPromise.then(db => {
-  //     if (!db) return;
-  //     const tx = db.transaction(store_name, 'readwrite');
-  //     const store = tx.objectStore(store_name);
+    dbPromise.then(db => {
+      if (!db) return;
+      const tx = db.transaction(store_name, 'readwrite');
+      const store = tx.objectStore(store_name);
 
-  //     if (datas.length > 1) {
-  //       datas.forEach(data => {
-  //         store.put(data);
-  //       });
-  //     } else {
-  //       store.put(datas);
-  //     }
-  //   });
-  // }
+      if (datas.length > 1) {
+        datas.forEach(data => {
+          store.put(data);
+        });
+      } else {
+        store.put(datas);
+      }
+    });
+  }
   /**
    * @fetch all restaurants.
    */
