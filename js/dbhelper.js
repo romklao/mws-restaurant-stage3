@@ -288,7 +288,6 @@ class DBHelper {
       })
       .catch(error => {
         review_data['updatedAt'] = new Date().getTime();
-        console.log('review_data', review_data);
         /* keep datas in IndexedDB after posting data to the server when offline*/
         DBHelper.storeDataIndexedDb([review_data], 'offline-reviews');
         console.log('Review stored offline in IDB');
