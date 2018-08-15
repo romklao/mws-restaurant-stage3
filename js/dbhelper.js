@@ -31,7 +31,9 @@ class DBHelper {
       });
     }
   }
-
+  /**
+   * @get data from a store in IndexedDB if it is available
+   */
   static getCachedIndexedDB(store_name) {
     let dbPromise = DBHelper.openDatabase();
 
@@ -43,6 +45,10 @@ class DBHelper {
     });
   }
 
+  /**
+   * @store the data in IndexedDB after fetching it from the server
+   * @param datas: are retrieved from IndexedDB or the server, store_name: {string}
+   */
   static storeDataIndexedDb(datas, store_name) {
     let dbPromise = DBHelper.openDatabase();
 
@@ -51,17 +57,13 @@ class DBHelper {
       const tx = db.transaction(store_name, 'readwrite');
       const store = tx.objectStore(store_name);
 
-      if (datas.length > 1) {
-        datas.forEach(data => {
-          store.put(data);
-        });
-      } else {
-        store.put(datas);
-      }
+      datas.forEach(data => {
+        store.put(data);
+      });
     });
   }
   /**
-   * @fetch all restaurants.
+   * @fetch all restaurants form IndexedDB if they exist otherwise fetch from the server.
    */
   static fetchRestaurants(callback) {
     //check if data exists in indexDB API if it does return callback
@@ -82,7 +84,7 @@ class DBHelper {
     });
   }
   /**
-   * @fetch all reviews.
+   * @fetch all reviews form IndexedDB if they exist otherwise fetch from the server.
    */
   static fetchRestaurantReviews(restaurant, callback) {
     let dbPromise = DBHelper.openDatabase();
@@ -106,7 +108,6 @@ class DBHelper {
             return response.json();
           })
           .then(reviews => {
-            console.log('reviews2', reviews);
             //store data in indexDB API after fetching
             DBHelper.storeDataIndexedDb(reviews, 'reviews');
             callback(null, reviews);
@@ -243,6 +244,9 @@ class DBHelper {
     return (`/img/${restaurant.photograph}.jpg`);
   }
 
+  /**
+   * @show messages and hide when the button is clicked
+   */
   static showMessage() {
     let modal = document.getElementById('modal-overlay');
     modal.style.display = 'block';
@@ -253,6 +257,12 @@ class DBHelper {
     });
   }
 
+  /**
+   * @post review_data to the server when a user submits a review
+   * online: keep it in the reviews store in IndexedDB
+   * offline: keep it in the offlne-reviews in IndexedDB
+   * @param review_data is from a user fills out the form
+   */
   static createRestaurantReview(review_data) {
 
     return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
@@ -270,21 +280,25 @@ class DBHelper {
       .then(response => {
         response.json()
           .then(review_data => {
+          /* keep datas in IndexedDB after posting data to the server when online */
             console.log('review_stored', review_data);
-            DBHelper.storeDataIndexedDb(review_data, 'reviews');
+            DBHelper.storeDataIndexedDb([review_data], 'reviews');
             return review_data;
           });
       })
       .catch(error => {
         review_data['updatedAt'] = new Date().getTime();
         console.log('review_data', review_data);
-
-        DBHelper.storeDataIndexedDb(review_data, 'offline-reviews');
+        /* keep datas in IndexedDB after posting data to the server when offline*/
+        DBHelper.storeDataIndexedDb([review_data], 'offline-reviews');
         console.log('Review stored offline in IDB');
         return;
       });
   }
 
+  /**
+   * @clear data in the offline-reviews store
+   */
   static clearOfflineReviews() {
     let dbPromise = DBHelper.openDatabase();
     dbPromise.then(db => {
@@ -295,6 +309,9 @@ class DBHelper {
     return;
   }
 
+  /**
+   * @get reviews from offline-stores in IndexedDB when a user go from offline to online
+   */
   static createOfflineReview() {
     DBHelper.openDatabase().then(db => {
       if (!db) return;
@@ -326,16 +343,16 @@ class DBHelper {
 }
 
 /* create these functions to add online status to the browser
- * when it is offline it will store review submition into offline-reviews IndexedDB
+ * when it is offline it will store review submission in offline-reviews IndexedDB
 */
-function onGoOnline() {
+let onGoOnline = () => {
   console.log('Going online');
   DBHelper.createOfflineReview();
-}
+};
 
-function onGoOffline() {
+let onGoOffline = () => {
   console.log('Going offline');
-}
+};
 
 window.addEventListener('online', onGoOnline);
 window.addEventListener('offline', onGoOffline);
@@ -371,17 +388,17 @@ navigator.serviceWorker.register('./sw.js').then(function(reg) {
   console.log('Service worker registration failed');
 });
 
-function _updateReady(worker) {
+let _updateReady = (worker) => {
   worker.postMessage({action: 'skipWaiting'});
-}
+};
 
-function _trackInstalling(worker) {
+let  _trackInstalling = (worker) => {
   let indexController = this;
   worker.addEventListener('stateChange', function() {
     if (worker.state == 'installed') {
       indexController._updateReady(worker);
     }
   });
-}
+};
 
 export default DBHelper;
