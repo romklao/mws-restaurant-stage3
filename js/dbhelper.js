@@ -243,15 +243,15 @@ class DBHelper {
     return (`/img/${restaurant.photograph}.jpg`);
   }
 
-  // static showMessage() {
-  //   let modal = document.getElementById('modal-overlay');
-  //   modal.style.display = 'block';
+  static showMessage() {
+    let modal = document.getElementById('modal-overlay');
+    modal.style.display = 'block';
 
-  //   let button = document.getElementById('bttn-close');
-  //   button.addEventListener('click', function() {
-  //     modal.style.display = 'none';
-  //   });
-  // }
+    let button = document.getElementById('bttn-close');
+    button.addEventListener('click', function() {
+      modal.style.display = 'none';
+    });
+  }
 
   static createRestaurantReview(review_data) {
 
