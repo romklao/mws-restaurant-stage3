@@ -285,15 +285,15 @@ class DBHelper {
       });
   }
 
-  // static clearOfflineReviews() {
-  //   let dbPromise = DBHelper.openDatabase();
-  //   dbPromise.then(db => {
-  //     const tx = db.transaction('offline-reviews', 'readwrite');
-  //     const store = tx.objectStore('offline-reviews');
-  //     store.clear();
-  //   });
-  //   return;
-  // }
+  static clearOfflineReviews() {
+    let dbPromise = DBHelper.openDatabase();
+    dbPromise.then(db => {
+      const tx = db.transaction('offline-reviews', 'readwrite');
+      const store = tx.objectStore('offline-reviews');
+      store.clear();
+    });
+    return;
+  }
 
   // static createOfflineReview() {
   //   DBHelper.openDatabase().then(db => {
