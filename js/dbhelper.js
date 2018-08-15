@@ -295,20 +295,20 @@ class DBHelper {
     return;
   }
 
-  // static createOfflineReview() {
-  //   DBHelper.openDatabase().then(db => {
-  //     if (!db) return;
-  //     const tx = db.transaction('offline-reviews', 'readwrite');
-  //     const store = tx.objectStore('offline-reviews');
-  //     store.getAll().then(offlineReviews => {
-  //       console.log('offlineReviews', offlineReviews);
-  //       offlineReviews.forEach(review => {
-  //         DBHelper.createRestaurantReview(review);
-  //       });
-  //       DBHelper.clearOfflineReviews();
-  //     });
-  //   });
-  // }
+  static createOfflineReview() {
+    DBHelper.openDatabase().then(db => {
+      if (!db) return;
+      const tx = db.transaction('offline-reviews', 'readwrite');
+      const store = tx.objectStore('offline-reviews');
+      store.getAll().then(offlineReviews => {
+        console.log('offlineReviews', offlineReviews);
+        offlineReviews.forEach(review => {
+          DBHelper.createRestaurantReview(review);
+        });
+        DBHelper.clearOfflineReviews();
+      });
+    });
+  }
 
   /**
    * @Map marker for a restaurant.
