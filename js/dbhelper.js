@@ -84,39 +84,39 @@ class DBHelper {
   /**
    * @fetch all reviews.
    */
-  // static fetchRestaurantReviews(restaurant, callback) {
-  //   let dbPromise = DBHelper.openDatabase();
+  static fetchRestaurantReviews(restaurant, callback) {
+    let dbPromise = DBHelper.openDatabase();
 
-  //   dbPromise.then(db => {
-  //     if (!db) return;
-  //     const tx = db.transaction('reviews');
-  //     const store = tx.objectStore('reviews');
-  //     const index = store.index('restaurant_id');
+    dbPromise.then(db => {
+      if (!db) return;
+      const tx = db.transaction('reviews');
+      const store = tx.objectStore('reviews');
+      const index = store.index('restaurant_id');
 
-  //     index.getAll(restaurant.id).then(results => {
-  //       console.log('reviews', results);
-  //       callback(null, results);
+      index.getAll(restaurant.id).then(results => {
+        console.log('reviews', results);
+        callback(null, results);
 
-  //       if (!navigator.onLine) {
-  //         return;
-  //       }
+        if (!navigator.onLine) {
+          return;
+        }
 
-  //       fetch(`${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurant.id}`)
-  //         .then(response => {
-  //           return response.json();
-  //         })
-  //         .then(reviews => {
-  //           console.log('reviews2', reviews);
-  //           //store data in indexDB API after fetching
-  //           DBHelper.storeDataIndexedDb(reviews, 'reviews');
-  //           callback(null, reviews);
-  //         })
-  //         .catch(err => {
-  //           callback(err , null);
-  //         });
-  //     });
-  //   });
-  // }
+        fetch(`${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurant.id}`)
+          .then(response => {
+            return response.json();
+          })
+          .then(reviews => {
+            console.log('reviews2', reviews);
+            //store data in indexDB API after fetching
+            DBHelper.storeDataIndexedDb(reviews, 'reviews');
+            callback(null, reviews);
+          })
+          .catch(err => {
+            callback(err , null);
+          });
+      });
+    });
+  }
 
   /**
    * @fetch a restaurant by its ID.
