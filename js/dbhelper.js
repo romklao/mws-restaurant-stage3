@@ -32,16 +32,16 @@ class DBHelper {
     }
   }
 
-  // static getCachedIndexedDB(store_name) {
-  //   let dbPromise = DBHelper.openDatabase();
+  static getCachedIndexedDB(store_name) {
+    let dbPromise = DBHelper.openDatabase();
 
-  //   return dbPromise.then(function(db) {
-  //     if(!db) return;
-  //     let tx = db.transaction(store_name);
-  //     let store = tx.objectStore(store_name);
-  //     return store.getAll();
-  //   });
-  // }
+    return dbPromise.then(function(db) {
+      if(!db) return;
+      let tx = db.transaction(store_name);
+      let store = tx.objectStore(store_name);
+      return store.getAll();
+    });
+  }
 
   // static storeDataIndexedDb(datas, store_name) {
   //   let dbPromise = DBHelper.openDatabase();
