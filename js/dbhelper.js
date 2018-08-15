@@ -63,24 +63,24 @@ class DBHelper {
   /**
    * @fetch all restaurants.
    */
-  // static fetchRestaurants(callback) {
-  //   //check if data exists in indexDB API if it does return callback
-  //   DBHelper.getCachedIndexedDB('restaurants').then(results => {
-  //     if (results && results.length > 0) {
-  //       callback(null, results);
-  //     }
-  //     fetch(`${DBHelper.DATABASE_URL}/restaurants`)
-  //       .then(response => response.json())
-  //       .then(restaurants => {
-  //         //store data in indexDB API after fetching
-  //         DBHelper.storeDataIndexedDb(restaurants, 'restaurants');
-  //         callback(null, restaurants);
-  //       })
-  //       .catch(err => {
-  //         callback(err , null);
-  //       });
-  //   });
-  // }
+  static fetchRestaurants(callback) {
+    //check if data exists in indexDB API if it does return callback
+    DBHelper.getCachedIndexedDB('restaurants').then(results => {
+      if (results && results.length > 0) {
+        callback(null, results);
+      }
+      fetch(`${DBHelper.DATABASE_URL}/restaurants`)
+        .then(response => response.json())
+        .then(restaurants => {
+          //store data in indexDB API after fetching
+          DBHelper.storeDataIndexedDb(restaurants, 'restaurants');
+          callback(null, restaurants);
+        })
+        .catch(err => {
+          callback(err , null);
+        });
+    });
+  }
   /**
    * @fetch all reviews.
    */
