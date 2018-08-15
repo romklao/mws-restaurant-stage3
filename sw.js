@@ -49,8 +49,7 @@ send it to the page and add it to the cache at the same time.*/
 self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
 
-  // Don't use service worker caches for IndexDB based
-  // data.
+  // Don't use service worker caches for IndexDB based data.
   if (requestUrl.pathname.startsWith('/restaurants/') ||
       requestUrl.pathname.startsWith('/reviews/')) {
     return;
@@ -67,9 +66,6 @@ self.addEventListener('fetch', function(event) {
         return response;
       }
       return fetch(event.request).then(networkResponse => {
-        if (networkResponse.status === 400) {
-          return;
-        }
         return caches.open(staticCacheName).then(cache => {
           cache.put(event.request.url, networkResponse.clone());
           return networkResponse;
