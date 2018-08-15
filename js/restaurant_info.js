@@ -8,7 +8,6 @@ import DBHelper from './dbhelper';
 
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
-  //DBHelper.registerServiceWorker();
 });
 
 let initMap = () => {
@@ -22,7 +21,7 @@ let initMap = () => {
           center: restaurant.latlng,
           scrollwheel: false
         });
-        fillBreadcrumb(restaurant);
+        fillBreadcrumb();
         DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
       }
     }
@@ -37,12 +36,20 @@ window.gm_authFailure = () => {
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
-let fillBreadcrumb = (restaurant) => {
+let fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
-  const li = document.createElement('li');
-  li.innerHTML = restaurant.name;
-  breadcrumb.appendChild(li);
-  return li;
+  breadcrumb.innerHTML = '';
+
+  const liHome = document.createElement('li');
+  const link = document.createElement('a');
+  link.href = '/';
+  link.innerHTML = 'Home';
+  liHome.appendChild(link);
+  breadcrumb.appendChild(liHome);
+
+  const liName = document.createElement('li');
+  liName.innerHTML = restaurant.name;
+  breadcrumb.appendChild(liName);
 };
 
 /**
@@ -82,12 +89,13 @@ let fetchRestaurantFromURL = (callback) => {
       }
       DBHelper.fetchRestaurantReviews(self.restaurant, (error, reviews) => {
         self.restaurant.reviews = reviews;
+
         if (!reviews) {
           console.log(error);
         }
         fillRestaurantHTML(self.restaurant);
-        callback(null, self.restaurant);
       });
+      callback(null, restaurant);
     });
   }
 };
@@ -118,7 +126,6 @@ let fillRestaurantHTML = (restaurant) => {
 
   // fill reviews
   fillReviewsHTML(restaurant.reviews);
-  console.log('restaurant', restaurant);
 };
 
 /**
@@ -126,6 +133,7 @@ let fillRestaurantHTML = (restaurant) => {
  */
 let fillRestaurantHoursHTML = (operatingHours) => {
   const hours = document.getElementById('restaurant-hours');
+  hours.innerHTML = '';
   for (let key in operatingHours) {
     const row = document.createElement('tr');
     row.className = 'table-row';
@@ -171,7 +179,7 @@ let fillReviewsHTML = (reviews) => {
   }
   //const ul = document.getElementById('reviews-list');
 
-  let sortedReviews = restaurant.reviews.sort(function(a, b) {
+  let sortedReviews = reviews.sort(function(a, b) {
     return new Date(b.updatedAt) - new Date(a.updatedAt);
   });
 
@@ -204,7 +212,7 @@ let createReviewHTML = (review) => {
 
   const rating = document.createElement('p');
   rating.innerHTML = `RATING: ${review.rating}`;
-  rating.className = 'review-rating';
+  rating.className = 'number-rating';
   rating.setAttribute('tabindex', '7');
   li.appendChild(rating);
 
@@ -228,6 +236,9 @@ form.addEventListener('submit', function(e) {
   const formData = new FormData(form);
   for (let [key, value] of formData.entries()) {
     review[key] = value;
+  }
+  if (!navigator.onLine) {
+    DBHelper.showMessage();
   }
   DBHelper.createRestaurantReview(review)
     .then(data => {
