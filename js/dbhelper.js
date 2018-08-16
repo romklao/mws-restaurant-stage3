@@ -27,6 +27,7 @@ class DBHelper {
         upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
         let reviewStore = upgradeDb.createObjectStore('reviews', { keyPath: 'id' });
         reviewStore.createIndex('restaurant_id', 'restaurant_id', { unique: false });
+        reviewStore.createIndex('by-date', 'updatedAt', { unique: false });
         upgradeDb.createObjectStore('offline-reviews', { keyPath: 'updatedAt' });
       });
     }
