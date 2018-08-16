@@ -26,7 +26,7 @@ class DBHelper {
       return idb.open('restaurants', 3, (upgradeDb) => {
         upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
         let reviewStore = upgradeDb.createObjectStore('reviews', { keyPath: 'id' });
-        reviewStore.createIndex('restaurant_id', 'restaurant_id', {unique: false});
+        reviewStore.createIndex('restaurant_id', 'restaurant_id', { unique: false });
         upgradeDb.createObjectStore('offline-reviews', { keyPath: 'updatedAt' });
       });
     }
@@ -47,7 +47,7 @@ class DBHelper {
 
   /**
    * @store the data in IndexedDB after fetching it from the server
-   * @param datas: are retrieved from IndexedDB or the server, store_name: {string}
+   * @param datas: are retrieved from the server, store_name: {string}
    */
   static storeDataIndexedDb(datas, store_name) {
     let dbPromise = DBHelper.openDatabase();
@@ -59,6 +59,14 @@ class DBHelper {
 
       datas.forEach(data => {
         store.put(data);
+      });
+
+      store.openCursor(null, 'prev').then(function(cursor) {
+        return cursor.advance(50);
+      }).then(function deleteRest(cursor) {
+        if (!cursor) return;
+        cursor.delete();
+        return cursor.continue().then(deleteRest);
       });
     });
   }
@@ -91,6 +99,7 @@ class DBHelper {
 
     dbPromise.then(db => {
       if (!db) return;
+
       const tx = db.transaction('reviews');
       const store = tx.objectStore('reviews');
       const index = store.index('restaurant_id');
@@ -103,12 +112,15 @@ class DBHelper {
           return;
         }
 
-        fetch(`${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurant.id}`)
+        fetch(`${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurant.id}`, {
+          'Accept-Encoding': 'gzip'
+        })
           .then(response => {
             return response.json();
           })
           .then(reviews => {
             //store data in indexDB API after fetching
+            console.log('review_ln', reviews.length)
             DBHelper.storeDataIndexedDb(reviews, 'reviews');
             callback(null, reviews);
           })
@@ -315,6 +327,7 @@ class DBHelper {
       if (!db) return;
       const tx = db.transaction('offline-reviews', 'readwrite');
       const store = tx.objectStore('offline-reviews');
+
       store.getAll().then(offlineReviews => {
         console.log('offlineReviews', offlineReviews);
         offlineReviews.forEach(review => {
@@ -341,7 +354,8 @@ class DBHelper {
 }
 
 /* create these functions to add online status to the browser
- * when it is offline it will store review submission in offline-reviews IndexedDB
+ * when it is offline it will store review submissions in offline-reviews IndexedDB
+ * when connectivity is reestablished, it will call the function to show new reviews on the page
 */
 let onGoOnline = () => {
   console.log('Going online');
