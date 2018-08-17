@@ -226,18 +226,18 @@ let createReviewHTML = (review) => {
 /**
    * @show messages and hide when the button is clicked
    */
-// let showMessage = () => {
-//   let modal = document.getElementById('modal-overlay');
-//   let modalMessage = document.getElementById('modal-message');
+let showMessage = () => {
+  let modal = document.getElementById('modal-overlay');
+  let modalMessage = document.getElementById('modal-message');
 
-//   modalMessage.innerHTML = 'You are offline right now, the review will be sent when you are online later';
-//   modal.style.display = 'block';
+  modalMessage.innerHTML = 'You are offline right now, the review will be sent when you are online later';
+  modal.style.display = 'block';
 
-//   let button = document.getElementById('bttn-close');
-//   button.addEventListener('click', function() {
-//     modal.style.display = 'none';
-//   });
-// };
+  let button = document.getElementById('bttn-close');
+  button.addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+};
 
 /**
  * @submit the form, send to the server, and show it on a page
