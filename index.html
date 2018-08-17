@@ -1,52 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css"/>
-  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-  <link rel="stylesheet" href="css/styles.css">
-  <title>Restaurant Reviews</title>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f58500"/>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css"/>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Restaurant Reviews</title>
+  </head>
 
-<body>
-  <header>
-    <nav>
-      <h1><a href="/">Restaurant Reviews</a></h1>
-    </nav>
-  </header>
+  <body>
+    <header>
+      <nav>
+        <h1><a href="/">Restaurant Reviews</a></h1>
+      </nav>
+    </header>
 
-  <main class="maincontent">
-    <section id="map-container" role="application" aria-label="map">
-      <div id="map"></div>
-    </section>
-    <section>
-      <div class="filter-options">
-        <div class="filter-wrap">
-          <h2>Filter Results</h2>
-          <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Select Neighborhood" tabindex="1">
-            <option value="all" role="option">All Neighborhoods</option>
-          </select>
-          <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Select Cuisine" tabindex="2">
-            <option value="all" role="option">All Cuisines</option>
-          </select>
+    <main class="maincontent">
+      <section id="map-container" role="application" aria-label="map">
+        <div id="map"></div>
+      </section>
+      <section>
+        <div class="filter-options">
+          <div class="filter-wrap">
+            <h2>Filter Results</h2>
+            <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Select Neighborhood">
+              <option value="all" role="option">All Neighborhoods</option>
+            </select>
+            <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Select Cuisine">
+              <option value="all" role="option">All Cuisines</option>
+            </select>
+          </div>
         </div>
-      </div>
-      <ul id="restaurants-list" class="grid"></ul>
-    </section>
-  </main>
+        <ul id="restaurants-list" class="grid"></ul>
+      </section>
+    </main>
 
-  <footer class="footer">
-    Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
-  </footer>
+    <footer class="footer">
+      Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    </footer>
 
-  <!-- Don't use async and defer with google maps apis because there is race condition
-       with installing initmap and usage of the google maps apis-->
-  <script src="https://maps.googleapis.com/maps/api/js?&libraries=places&key=AIzaSyBSfnzcliB8d9is_xp9JDEHcXUN9OyC6vQ&v=3"></script>
-  <script src="js/main_bundle.js"></script>
+    <!-- Don't use async and defer with google maps apis because there is race condition
+         with installing initmap and usage of the google maps apis-->
+    <script src="https://maps.googleapis.com/maps/api/js?&libraries=places&key=AIzaSyBSfnzcliB8d9is_xp9JDEHcXUN9OyC6vQ&v=3"></script>
+    <script src="js/main_bundle.js"></script>
 
-</body>
+  </body>
 
 </html>
