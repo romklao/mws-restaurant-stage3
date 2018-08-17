@@ -106,20 +106,20 @@ let fetchRestaurantFromURL = (callback) => {
 let fillRestaurantHTML = (restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
-  name.setAttribute('tabindex', '1');
+  name.setAttribute('tabindex', '0');
 
   const image = document.getElementById('restaurant-img');
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.alt = `${restaurant.name} is the ${restaurant.cuisine_type} restaurant`;
-  image.setAttribute('tabindex', '2');
+  image.setAttribute('tabindex', '0');
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
-  cuisine.setAttribute('tabindex', '3');
+  cuisine.setAttribute('tabindex', '0');
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
-  address.setAttribute('tabindex', '4');
+  address.setAttribute('tabindex', '0');
 
   // fill operating hours
   fillRestaurantHoursHTML(restaurant.operating_hours);
@@ -141,14 +141,14 @@ let fillRestaurantHoursHTML = (operatingHours) => {
     const day = document.createElement('td');
     day.innerHTML = key;
     day.className = 'day-col';
-    day.setAttribute('tabindex', '5');
+    day.setAttribute('tabindex', '0');
 
     row.appendChild(day);
 
     const time = document.createElement('td');
     time.innerHTML = operatingHours[key];
     time.className = 'time-col';
-    time.setAttribute('tabindex', '5');
+    time.setAttribute('tabindex', '0');
     row.appendChild(time);
 
     hours.appendChild(row);
@@ -168,7 +168,7 @@ let fillReviewsHTML = (reviews) => {
 
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
-  title.setAttribute('tabindex', '6');
+  title.setAttribute('tabindex', '0');
   container.appendChild(title);
 
   if (!reviews) {
@@ -197,14 +197,14 @@ let createReviewHTML = (review) => {
   const name = document.createElement('p');
   name.innerHTML = review.name;
   name.className = 'review-name';
-  name.setAttribute('tabindex', '7');
+  name.setAttribute('tabindex', '0');
 
   div.appendChild(name);
 
   const date = document.createElement('p');
   date.innerHTML = new Date(review.updatedAt).toDateString();
   date.className = 'review-date';
-  date.setAttribute('tabindex', '7');
+  date.setAttribute('tabindex', '0');
 
   div.appendChild(date);
   li.appendChild(div);
@@ -212,16 +212,32 @@ let createReviewHTML = (review) => {
   const rating = document.createElement('p');
   rating.innerHTML = `RATING: ${review.rating}`;
   rating.className = 'number-rating';
-  rating.setAttribute('tabindex', '7');
+  rating.setAttribute('tabindex', '0');
   li.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
-  comments.setAttribute('tabindex', '7');
+  comments.setAttribute('tabindex', '0');
   li.appendChild(comments);
 
   return li;
 };
+
+/**
+   * @show messages and hide when the button is clicked
+   */
+// let showMessage = () => {
+//   let modal = document.getElementById('modal-overlay');
+//   let modalMessage = document.getElementById('modal-message');
+
+//   modalMessage.innerHTML = 'You are offline right now, the review will be sent when you are online later';
+//   modal.style.display = 'block';
+
+//   let button = document.getElementById('bttn-close');
+//   button.addEventListener('click', function() {
+//     modal.style.display = 'none';
+//   });
+// };
 
 /**
  * @submit the form, send to the server, and show it on a page
@@ -239,20 +255,16 @@ form.addEventListener('submit', function(e) {
     review[key] = value;
   }
   if (!navigator.onLine) {
-    DBHelper.showMessage();
+    showMessage();
   }
   DBHelper.createRestaurantReview(review)
-    .then(data => {
-      const ul = document.getElementById('reviews-list');
-      ul.appendChild(createReviewHTML(review));
+    .then(() => {
       form.reset();
-
       DBHelper.fetchRestaurantReviews(self.restaurant, (error, reviews) => {
-        self.restaurant.reviews = reviews;
-        if (!self.restaurant.reviews) {
+        if (!reviews) {
           console.log(error);
         }
-        fillReviewsHTML(self.restaurant.reviews);
+        fillReviewsHTML(reviews);
       });
     })
     .catch(error => console.error('err', error));
