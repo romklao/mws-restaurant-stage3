@@ -31,7 +31,7 @@ li {
 }
 
 a {
-  color: #ff9d3f;
+  color: #56c8d8;
   text-decoration: none;
 }
 
@@ -46,7 +46,7 @@ a img{
   border: none 0px #fff;
 }
 
-button:hover {
+button:hover, select:hover {
   cursor: pointer;
 }
 
@@ -125,7 +125,7 @@ nav h1 a {
 
 /* Add a color to all links inside the list */
 #breadcrumb li a {
-    color: #033c98;
+    color: #005b9f;
     text-decoration: none;
     font-size: 23px;
 }
@@ -148,8 +148,8 @@ nav h1 a {
 
 .filter-options {
   width: 100%;
-  background-color: #3397DB;
-  padding: 12px;
+  background-color: #039be5;
+  padding: 10px;
   border-bottom: 1px solid #fff;
 }
 
@@ -163,25 +163,76 @@ nav h1 a {
   margin-right: auto;
 }
 
-.filter-options h2 {
+/*.filter-options h2 {
   color: white;
   font-size: 1.7em;
   font-weight: normal;
   line-height: 1;
   width: 30%;
+  padding: 5px;
   margin: 0;
-  padding: 10px;
 }
 
-.filter-options select {
-  background-color: white;
-  border: 1px solid #fff;
-  font-size: 11pt;
-  height: 35px;
-  letter-spacing: 0;
-  margin: 9px 10px;
-  width: 200px;
+.filter-box {
+  display: flex;
+  justify-content: center;
+  width: 40%;
+  padding: 5px;
 }
+
+.empty-div {
+  width: 30%;
+}
+
+.rating-box {
+  width: 60px;
+  overflow: hidden;
+  border: 1px solid #039be5;
+  position: relative;
+  background: #fff;
+}
+
+.rating-box:after {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #006db3;
+  position: absolute;
+  top: 40%;
+  right: 5px;
+  content: "";
+  z-index: 45;
+ }
+
+.rating-box select {
+  border: 0;
+  position: relative;
+  font-size: 14px;
+  z-index: 45;
+  padding: 6px 10px;
+  background: none;
+  -webkit-appearance: none;
+}
+
+.neighborhoods-wrap, .cuisines-wrap {
+  width: 165px;
+  border: none;
+}
+
+.neighborhoods-wrap select , .cuisines-wrap select {
+  padding: 8px 10px;
+  width: 165px;
+}
+
+.neighborhoods-wrap {
+  margin-right: 5px;
+}
+
+.cuisines-wrap {
+  margin-left: 5px;
+}
+*/
 
 /* ====================== Restaurant Listing ====================== */
 
@@ -244,7 +295,7 @@ nav h1 a {
 }
 
 #restaurants-list li h1 {
-  color: #b53d00;
+  color: #006db3;
   font-weight: 500;
   font-size: 12pt;
   letter-spacing: 0;
@@ -258,9 +309,9 @@ nav h1 a {
 }
 
 #restaurants-list li a, #form-submit {
-  width: 125px;
-  background-color: #b53d00;
-  border-bottom: 3px solid #eee;
+  width: 131px;
+  background-color: #006db3;
+  border-bottom: 3px solid #b1d9f5;
   color: #fff;
   display: inline-block;
   font-size: 11pt;
@@ -301,7 +352,7 @@ nav h1 a {
 }
 
 #restaurant-name {
-  color: #b53d00;
+  color: #006db3;
   font-size: 19pt;
   font-weight: 400;
   letter-spacing: 0;
@@ -369,7 +420,7 @@ nav h1 a {
 
 .form-box > h2 {
   margin: 0;
-  color: #b53d00;
+  color: #006db3;
   font-size: 22pt;
   font-weight: 400;
   padding: 5px;
@@ -399,45 +450,13 @@ nav h1 a {
   justify-content: flex-end;
 }
 
-.rating-box {
-  width: 60px;
-  border-radius: 4px;
-  overflow: hidden;
-  border: 1px solid #9e9e9e;
-  position: relative;
-  padding: 4px 2px;
-  background: #fff;
-}
-.rating-box:after {
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid #b53d00;
-  position: absolute;
-  top: 40%;
-  right: 5px;
-  content: "";
-  z-index: 45;
- }
-.rating-box select {
-  border: 0;
-  position: relative;
-  z-index: 45;
-  background: none;
-  padding: 0 10px;
-  -webkit-appearance: none;
-}
-
 .label-rating {
   padding: 5px 20px 5px;
   font-size: 18px;
 }
 
 #review-rating {
-  font-size: 14px;
-  width: 55px;
-  height: 20px;
+  width: 58px;
 }
 
 .textarea-box {
@@ -476,7 +495,7 @@ textarea:focus {
 
 #reviews-container h2 {
   margin: 0;
-  color: #b53d00;
+  color: #006db3;
   font-size: 22pt;
   font-weight: 400;
   padding: 10px;
@@ -542,10 +561,9 @@ textarea:focus {
   width: 6.5em;
   font-size: 10pt;
   text-align: center;
-  background: #b53d00;
+  background: #006db3;
   margin: 10px 20px;
   padding: 4px 0 !important;
-  border-radius: 3px;
   color: white;
 }
 
@@ -638,6 +656,10 @@ textarea:focus {
 @media screen and (max-width: 950px) {
   .filter-options h2 {
     width: 100%;
+  }
+  .filter-box {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
 
