@@ -61,14 +61,6 @@ class DBHelper {
       datas.forEach(data => {
         store.put(data);
       });
-
-      store.openCursor(null, 'prev').then(function(cursor) {
-        return cursor.advance(50);
-      }).then(function deleteRest(cursor) {
-        if (!cursor) return;
-        cursor.delete();
-        return cursor.continue().then(deleteRest);
-      });
     });
   }
   /**
@@ -83,6 +75,7 @@ class DBHelper {
       fetch(`${DBHelper.DATABASE_URL}/restaurants`)
         .then(response => response.json())
         .then(restaurants => {
+          console.log('restaurants', restaurants);
           //store data in indexDB API after fetching
           DBHelper.storeDataIndexedDb(restaurants, 'restaurants');
           callback(null, restaurants);
@@ -106,22 +99,26 @@ class DBHelper {
       const index = store.index('restaurant_id');
 
       index.getAll(restaurant.id).then(results => {
-        console.log('reviews', results);
+        //console.log('reviews', results);
         callback(null, results);
 
         if (!navigator.onLine) {
           return;
         }
 
-        fetch(`${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurant.id}`, {
-          'Accept-Encoding': 'gzip'
-        })
+        fetch(`${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurant.id}`)
           .then(response => {
             return response.json();
           })
           .then(reviews => {
             //store data in indexDB API after fetching
-            console.log('review_ln', reviews.length)
+            console.log('reviews', reviews);
+            let reviewsLen = reviews.length;
+            if (reviewsLen >= 29) {
+              for (let i = 0; i < reviewsLen - 20; i++) {
+                DBHelper.deleteRestaurantReview(reviews[i].id);
+              }
+            }
             DBHelper.storeDataIndexedDb(reviews, 'reviews');
             callback(null, reviews);
           })
@@ -258,26 +255,12 @@ class DBHelper {
   }
 
   /**
-   * @show messages and hide when the button is clicked
-   */
-  static showMessage() {
-    let modal = document.getElementById('modal-overlay');
-    modal.style.display = 'block';
-
-    let button = document.getElementById('bttn-close');
-    button.addEventListener('click', function() {
-      modal.style.display = 'none';
-    });
-  }
-
-  /**
    * @post review_data to the server when a user submits a review
    * online: keep it in the reviews store in IndexedDB
    * offline: keep it in the offlne-reviews in IndexedDB
    * @param review_data is from a user fills out the form
    */
   static createRestaurantReview(review_data) {
-
     return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
       method: 'POST',
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -304,6 +287,21 @@ class DBHelper {
         DBHelper.storeDataIndexedDb([review_data], 'offline-reviews');
         console.log('Review stored offline in IDB');
         return;
+      });
+  }
+
+  static deleteRestaurantReview(review_id) {
+    fetch(`${DBHelper.DATABASE_URL}/reviews/${review_id}`, {
+      method: 'DELETE'
+    })
+      .then(response => {
+        return response;
+      })
+      .then(data => {
+        return data;
+      })
+      .catch(err => {
+        console.log('Error', err);
       });
   }
 
