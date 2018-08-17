@@ -1,105 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Normalize.css for better cross-browser consistency -->
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-  <!-- Main CSS file -->
-  <link rel="stylesheet" href="css/styles.css">
-  <title>Restaurant Info</title>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f58500"/>
+    <link rel="manifest" href="manifest.json">
+    <!-- Normalize.css for better cross-browser consistency -->
+    <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <!-- Main CSS file -->
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Restaurant Info</title>
+  </head>
 
-<body class="inside">
-  <!-- Beginning header -->
-  <header>
-    <!-- Beginning nav -->
-    <nav>
-      <h1><a href="/">Restaurant Reviews</a></h1>
-    </nav>
-    <!-- Beginning breadcrumb -->
-    <ul id="breadcrumb" role="navigation">
-    </ul>
-    <!-- End breadcrumb -->
-    <!-- End nav -->
-  </header>
-  <!-- End header -->
+  <body class="inside">
+    <!-- Beginning header -->
+    <header>
+      <!-- Beginning nav -->
+      <nav>
+        <h1><a href="/">Restaurant Reviews</a></h1>
+      </nav>
+      <!-- Beginning breadcrumb -->
+      <ul id="breadcrumb" role="navigation">
+      </ul>
+      <!-- End breadcrumb -->
+      <!-- End nav -->
+    </header>
+    <!-- End header -->
 
-  <!-- Beginning main -->
-  <main class="maincontent">
-    <!-- Beginning map -->
-    <section id="map-container" role="application" aria-label="map">
-      <div id="map"></div>
-    </section>
-    <!-- End map -->
-    <!-- Beginning restaurant -->
-    <section id="restaurant-container">
-      <div id="restaurant-wrap">
-        <h1 id="restaurant-name"></h1>
-        <img id="restaurant-img">
-        <p id="restaurant-cuisine"></p>
-        <p id="restaurant-address"></p>
-        <table id="restaurant-hours"></table>
-      </div>
-    </section>
-    <!-- end restaurant -->
-    <!-- Beginning reviews -->
-    <section id="form-container">
-      <div class="form-box">
-        <h2>Add a review</h2>
-        <div class="form-wrap">
-          <form id="review-form">
-            <div class="input-wrap">
-              <input type="text" name="name" id="username" placeholder="Name" autofocus="autofocus" required>
-              <div class="rating-wrap">
-                <label class="label-rating">Rating:</label>
-                <select name="rating" id="review-rating">
-                  <option value="1" role="option">1</option>
-                  <option value="2" role="option">2</option>
-                  <option value="3" role="option">3</option>
-                  <option value="4" role="option">4</option>
-                  <option value="5" role="option">5</option>
-                </select>
+    <!-- Beginning main -->
+    <main class="maincontent">
+      <!-- Beginning map -->
+      <section id="map-container" role="application" aria-label="map">
+        <div id="map"></div>
+      </section>
+      <!-- End map -->
+      <!-- Beginning restaurant -->
+      <section id="restaurant-container">
+        <div id="restaurant-wrap">
+          <h1 id="restaurant-name"></h1>
+          <img id="restaurant-img">
+          <p id="restaurant-cuisine"></p>
+          <p id="restaurant-address"></p>
+          <table id="restaurant-hours"></table>
+        </div>
+      </section>
+      <!-- end restaurant -->
+      <!-- Beginning reviews -->
+      <section id="form-container">
+        <div class="form-box">
+          <h2>Add a review</h2>
+          <div class="form-wrap">
+            <form id="review-form">
+              <div class="input-wrap">
+                <input type="text" name="name" id="username" placeholder="Name" autofocus="autofocus" aria-label="User name" required>
+                <div class="rating-wrap">
+                  <label class="label-rating">Rating</label>
+                  <div class="rating-box">
+                    <select name="rating" id="review-rating" aria-label="Select review rating">
+                      <option value="1" role="option">1</option>
+                      <option value="2" role="option">2</option>
+                      <option value="3" role="option">3</option>
+                      <option value="4" role="option" selected>4</option>
+                      <option value="5" role="option">5</option>
+                    </select>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="textarea-box">
-              <textarea rows="1" maxlength="10000" id="textarea" name="comments" placeholder="Add your comment" autofocus="autofocus" required></textarea>
-            </div>
-            <input type="submit" name="submit" value="COMMENT" id="form-submit">
-          </form>
+              <div class="textarea-box">
+                <textarea rows="1" maxlength="10000" id="textarea" name="comments" placeholder="Add your comment" aria-label="Leave Comments Please" autofocus="autofocus" required></textarea>
+                <input type="submit" name="submit" value="COMMENT" id="form-submit">
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+      <section id="reviews-container">
+      </section>
+      <!-- End reviews -->
+    </main>
+    <!-- End main -->
+
+    <!-- message modal that pops up when a user submits a review -->
+    <div id="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p class="close"><button id="bttn-close">x</button></p>
+          <p id="modal-message"></p>
         </div>
       </div>
-    </section>
-    <section id="reviews-container">
-    </section>
-    <!-- End reviews -->
-  </main>
-  <!-- End main -->
-
-  <!-- message modal that pops up when a user submits a review -->
-  <div id="modal-overlay">
-    <div class="modal-content">
-      <div class="modal-body">
-        <p class="close"><button id="bttn-close">x</button></p>
-        <p class="modal-message">You are offline right now, the review will be sent when you are online later</p>
-      </div>
     </div>
-  </div>
-   <!-- Beginning footer -->
-  <footer class="footer">
-    Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
-  </footer>
-  <!-- End footer -->
+     <!-- Beginning footer -->
+    <footer class="footer">
+      Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    </footer>
+    <!-- End footer -->
 
-  <!-- Beginning scripts -->
-  <script src="https://maps.googleapis.com/maps/api/js?&libraries=places&key=AIzaSyBSfnzcliB8d9is_xp9JDEHcXUN9OyC6vQ&v=3"></script>
-  <script src="js/restaurant_bundle.js"></script>
- <!-- End scripts -->
+    <!-- Beginning scripts -->
+    <script src="https://maps.googleapis.com/maps/api/js?&libraries=places&key=AIzaSyBSfnzcliB8d9is_xp9JDEHcXUN9OyC6vQ&v=3"></script>
+    <script src="js/restaurant_bundle.js"></script>
+   <!-- End scripts -->
 
 
-</body>
+  </body>
 
 </html>
