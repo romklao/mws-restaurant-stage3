@@ -99,17 +99,33 @@ let createRestaurantHTML = (restaurant) => {
   image.alt = `${restaurant.name} is ${restaurant.cuisine_type} restaurant`;
   li.append(image);
 
+  const nameWrap = document.createElement('div');
+  nameWrap.className = 'name-wrap';
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
-  li.append(name);
+  nameWrap.append(name);
 
+  const buttnIcon = document.createElement('button');
+  buttnIcon.setAttribute('aria-label', 'Select as a favorite restaurant');
+  buttnIcon.className = 'buttn-icon';
+
+  const heart = document.createElement('i');
+  heart.className = 'fas fa-heart';
+  buttnIcon.append(heart);
+
+  nameWrap.append(buttnIcon);
+  li.append(nameWrap);
+
+  const addressWrap = document.createElement('div');
+  addressWrap.className = 'address-wrap';
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
-  li.append(neighborhood);
+  addressWrap.append(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
-  li.append(address);
+  addressWrap.append(address);
+  li.append(addressWrap);
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
