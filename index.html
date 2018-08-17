@@ -29,12 +29,20 @@
         <div class="filter-options">
           <div class="filter-wrap">
             <h2>Filter Results</h2>
-            <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Select Neighborhood">
-              <option value="all" role="option">All Neighborhoods</option>
-            </select>
-            <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Select Cuisine">
-              <option value="all" role="option">All Cuisines</option>
-            </select>
+            <div class="filter-box">
+              <div class="neighborhoods-wrap rating-box">
+                <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Select Neighborhood">
+                  <option value="all" role="option">All Neighborhoods</option>
+                </select>
+              </div>
+              <div class="cuisines-wrap rating-box">
+                <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Select Cuisine">
+                  <option value="all" role="option">All Cuisines</option>
+                </select>
+              </div>
+            </div>
+            <div class="empty-div">
+            </div>
           </div>
         </div>
         <ul id="restaurants-list" class="grid"></ul>

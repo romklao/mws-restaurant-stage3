@@ -337,6 +337,25 @@ class DBHelper {
     });
   }
 
+  static toggleFavorite(restaurant, isFavorite) {
+    return fetch(`${DBHelper.DATABASE_URL}/restaurants/${restaurant.id}/?is_favorite=${isFavorite}`, {
+      method: 'PUT'
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        console.log('dataFav', data);
+        DBHelper.storeDataIndexedDb(data, 'restaurants');
+        return data;
+      })
+      .catch(error => {
+        restaurant.is_favorite = isFavorite;
+        DBHelper.storeDataIndexedDb(restaurant, 'restaurants');
+        return;
+      });
+  }
+
   /**
    * @Map marker for a restaurant.
    */
