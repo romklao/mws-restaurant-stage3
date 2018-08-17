@@ -4,7 +4,7 @@
   "description": "mws-restaurant-review",
   "main": "gulpfile.js",
   "scripts": {
-    "test" : "gulp test",
+    "test": "gulp test",
     "start": "node"
   },
   "repository": {
@@ -35,8 +35,10 @@
     "gulp-babel": "^7.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-eslint": "^4.0.2",
+    "gulp-image-resize": "^0.13.0",
     "gulp-imagemin": "^4.1.0",
     "gulp-jasmine-phantom": "^3.0.0",
+    "gulp-newer": "^1.4.0",
     "gulp-pngquant": "^1.0.12",
     "gulp-sass": "^4.0.1",
     "gulp-sourcemaps": "^2.6.4",
