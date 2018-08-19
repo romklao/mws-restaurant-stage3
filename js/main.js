@@ -104,7 +104,7 @@ let createRestaurantHTML = (restaurant) => {
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
   nameWrap.append(name);
-
+  //import the fillFavoritesHTML from dbhelper.js
   nameWrap.append(DBHelper.fillFavoritesHTML(restaurant));
   li.append(nameWrap);
 

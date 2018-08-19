@@ -71,7 +71,6 @@ class DBHelper {
     //check if data exists in indexDB API if it does return callback
     DBHelper.getCachedIndexedDB('restaurants').then(results => {
       if (results && results.length > 0) {
-        console.log('restaurants', results);
         callback(null, results);
       } else {
         // Use else condition to avoid fetching from sails server
@@ -116,7 +115,6 @@ class DBHelper {
           })
           .then(reviews => {
             //store data in indexDB API after fetching
-            console.log('reviews', reviews);
             let reviewsLen = reviews.length;
             if (reviewsLen >= 29) {
               for (let i = 0; i < reviewsLen - 20; i++) {
@@ -373,7 +371,10 @@ class DBHelper {
       });
     });
   }
-
+  /**
+   *@when online update a value of a restaurant's favorite by sending the PUT request to the server
+   *and store the data to IndexedDB so it can be used when offline
+  */
   static toggleFavorite(restaurant, isFavorite) {
     return fetch(`${DBHelper.DATABASE_URL}/restaurants/${restaurant.id}/?is_favorite=${isFavorite}`, {
       method: 'PUT',
