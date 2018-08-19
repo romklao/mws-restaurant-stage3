@@ -182,19 +182,6 @@ class DBHelper {
     });
   }
 
-  static fetchRestaurantByFavorites(favorite, callback) {
-    // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Filter restaurants to have only given favorite value
-        const results = restaurants.filter(r => r.favorites == favorite);
-        callback(null, results);
-      }
-    });
-  }
-
   /**
    * @fetch restaurants by a cuisine and a neighborhood with proper error handling.
    */
@@ -431,7 +418,18 @@ class DBHelper {
     label.appendChild(input);
     return label;
   }
+  /*@create these functions to add online status to the browser
+   * when it is offline it will store review submissions in offline-reviews IndexedDB
+   * when connectivity is reestablished, it will call the function to show new reviews on the page
+  */
+  static onGoOnline() {
+    console.log('Going online');
+    DBHelper.createOfflineReview();
+  }
 
+  static onGoOffline() {
+    console.log('Going offline');
+  }
   /**
    * @Map marker for a restaurant.
    */
@@ -447,21 +445,8 @@ class DBHelper {
   }
 }
 
-/* create these functions to add online status to the browser
- * when it is offline it will store review submissions in offline-reviews IndexedDB
- * when connectivity is reestablished, it will call the function to show new reviews on the page
-*/
-let onGoOnline = () => {
-  console.log('Going online');
-  DBHelper.createOfflineReview();
-};
-
-let onGoOffline = () => {
-  console.log('Going offline');
-};
-
-window.addEventListener('online', onGoOnline);
-window.addEventListener('offline', onGoOffline);
+window.addEventListener('online', DBHelper.onGoOnline);
+window.addEventListener('offline', DBHelper.onGoOffline);
 
 /* @register ServiceWorker to cache data for the site
    * to allow any page that has been visited is accessible offline
