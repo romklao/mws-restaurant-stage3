@@ -475,9 +475,10 @@ navigator.serviceWorker.register('./sw.js').then(function(reg) {
     if (refreshing) return;
     refreshing = true;
   });
-}).catch(function () {
-  console.log('Service worker registration failed');
-});
+})
+  .catch(function () {
+    console.log('Service worker registration failed');
+  });
 
 let _updateReady = (worker) => {
   worker.postMessage({action: 'skipWaiting'});
