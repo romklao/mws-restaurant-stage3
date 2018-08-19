@@ -168,20 +168,20 @@ nav h1 a {
   font-size: 1.7em;
   font-weight: normal;
   line-height: 1;
-  width: 30%;
-  padding: 5px;
+  width: 25%;
+  padding: 5px 0;
   margin: 0;
 }
 
 .filter-box {
   display: flex;
-  justify-content: center;
-  width: 40%;
-  padding: 5px;
+  justify-content: flex-start;
+  width: 50%;
+  padding: 5px 3px;
 }
 
 .empty-div {
-  width: 30%;
+  width: 25%;
 }
 
 .rating-box {
@@ -215,23 +215,21 @@ nav h1 a {
   -webkit-appearance: none;
 }
 
-.neighborhoods-wrap, .cuisines-wrap {
-  width: 165px;
+.neighborhoods-wrap, .cuisines-wrap, .favorites-wrap {
+  width: 173px;
   border: none;
 }
 
-.neighborhoods-wrap select , .cuisines-wrap select {
+.neighborhoods-wrap select , .cuisines-wrap select, .favorites-wrap select {
   padding: 8px 10px;
-  width: 165px;
+  width: 173px;
 }
 
-.neighborhoods-wrap {
-  margin-right: 5px;
+.neighborhoods-wrap, .cuisines-wrap {
+  margin-right: 10px;
 }
 
-.cuisines-wrap {
-  margin-left: 5px;
-}
+
 
 
 /* ====================== Restaurant Listing ====================== */
@@ -284,9 +282,14 @@ nav h1 a {
   flex-grow: 1;
 }
 
-.fas {
+.fa-heart {
   font-size: 20px;
-  color: #7d7a7aad;
+  color: #aeb0b1;
+}
+
+.fa-star {
+  font-size: 19px;
+  color: #fdd835;
 }
 
 .buttn-icon {
@@ -311,7 +314,6 @@ nav h1 a {
 #restaurants-list li a, #form-submit {
   width: 131px;
   background-color: #006db3;
-  border-bottom: 3px solid #b1d9f5;
   color: #fff;
   display: inline-block;
   font-size: 11pt;
@@ -349,6 +351,29 @@ nav h1 a {
   background-color: #ccc;
   height: 100%;
   width: 100%;
+}
+
+/* Customize the label (the container) */
+.fav-container {
+  position: relative;
+  padding: 0 15px;
+  cursor: pointer;
+  font-size: 22px;
+  /*-webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;*/
+}
+
+/* Hide the browser's default checkbox */
+.fav-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  top: 3px;
+  left: 16px;
+  width: 20px;
+  height: 20px;
 }
 
 #restaurant-name {
@@ -513,12 +538,12 @@ textarea:focus {
 
 #restaurant-hours .day-col {
   text-align: right;
-  padding: 0 20px;
+  padding-right: 20px;
   width: 50%;
 }
 #restaurant-hours .time-col {
   text-align: left;
-  padding: 0 10px;
+  padding-left: 10px;
   width: 50%;
 }
 
