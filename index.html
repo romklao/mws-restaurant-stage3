@@ -31,13 +31,19 @@
             <h2>Filter Results</h2>
             <div class="filter-box">
               <div class="neighborhoods-wrap rating-box">
-                <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Select Neighborhood">
+                <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Filter for Neighborhood">
                   <option value="all" role="option">All Neighborhoods</option>
                 </select>
               </div>
               <div class="cuisines-wrap rating-box">
-                <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Select Cuisine">
+                <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Filter for Cuisine">
                   <option value="all" role="option">All Cuisines</option>
+                </select>
+              </div>
+              <div class="favorites-wrap rating-box">
+                <select id="favorites-select" name="favorites" onchange="updateRestaurants()" aria-label="Filter for Favorites">
+                  <option value="all">Favorites and not</option>
+                  <option value="true">Favorites</option>
                 </select>
               </div>
             </div>
