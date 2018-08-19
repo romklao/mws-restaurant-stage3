@@ -51,21 +51,45 @@ let fillBreadcrumb = (restaurant) => {
   liName.innerHTML = restaurant.name;
   breadcrumb.appendChild(liName);
 
+  breadcrumb.appendChild(fillFavoriteBreadcrum(restaurant));
+};
+
+let fillFavoriteBreadcrum = (restaurant) => {
   const label = document.createElement('label');
-  label.setAttribute('aria-label', 'Label for select favorite');
+  label.setAttribute('aria-label', 'Label for checking favorite');
   label.setAttribute('for', 'fav-check');
   label.className = 'fav-container';
 
   const icon = document.createElement('i');
   icon.className = 'fas fa-heart';
+  icon.id = 'heart-breadcrum';
   label.appendChild(icon);
 
   const input = document.createElement('input');
   input.type = 'checkbox';
-  input.id = 'fav-check';
+  input.className = 'fav-check';
+  input.setAttribute('aria-label', 'Check favorite');
   label.appendChild(input);
 
-  breadcrumb.appendChild(label);
+  input.checked = (restaurant.is_favorite  == 'true');
+
+  if (restaurant.is_favorite == 'true') {
+    icon.style.color = '#d32f2f';
+  } else {
+    icon.style.color = '#aeb0b1';
+  }
+
+  input.addEventListener('change', event => {
+    event.preventDefault();
+    if (input.checked == true) {
+      icon.style.color = '#d32f2f';
+      DBHelper.toggleFavorite(restaurant, input.checked);
+    } else {
+      icon.style.color = '#aeb0b1';
+      DBHelper.toggleFavorite(restaurant, input.checked);
+    }
+  });
+  return label;
 };
 
 /**
@@ -123,13 +147,6 @@ let fillRestaurantHTML = (restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
   name.setAttribute('tabindex', '0');
-
-  console.log('restaurantFav', restaurant.is_favorite);
-  const favSelect = document.getElementById('fav-select');
-  favSelect.checked = (restaurant.is_favorite  == 'true');
-  favSelect.addEventListener('change', event => {
-    DBHelper.toggleFavorite(restaurant, favSelect.checked);
-  });
 
   const image = document.getElementById('restaurant-img');
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
