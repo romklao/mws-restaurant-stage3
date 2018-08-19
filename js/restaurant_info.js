@@ -50,6 +50,22 @@ let fillBreadcrumb = (restaurant) => {
   const liName = document.createElement('li');
   liName.innerHTML = restaurant.name;
   breadcrumb.appendChild(liName);
+
+  const label = document.createElement('label');
+  label.setAttribute('aria-label', 'Label for select favorite');
+  label.setAttribute('for', 'fav-check');
+  label.className = 'fav-container';
+
+  const icon = document.createElement('i');
+  icon.className = 'fas fa-heart';
+  label.appendChild(icon);
+
+  const input = document.createElement('input');
+  input.type = 'checkbox';
+  input.id = 'fav-check';
+  label.appendChild(input);
+
+  breadcrumb.appendChild(label);
 };
 
 /**
