@@ -276,7 +276,7 @@ nav h1 a {
 }
 
 .fa-heart {
-  font-size: 22px;
+  font-size: 21px;
   color: #aeb0b1;
 }
 
@@ -288,10 +288,6 @@ nav h1 a {
 #fav-label {
   padding: 0;
 }
-
-/*.heart-mainpage {
-  font-size: 19px;
-}*/
 
 .buttn-icon {
   background: none;
@@ -357,13 +353,16 @@ nav h1 a {
 /* Customize the label (the container) */
 .fav-container {
   position: relative;
-  padding-left: 15px;
   cursor: pointer;
   font-size: 22px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.breadcrum-name {
+  margin-right: 10px;
 }
 
 /* Hide the browser's default checkbox */
