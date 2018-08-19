@@ -105,7 +105,7 @@ let createRestaurantHTML = (restaurant) => {
   name.innerHTML = restaurant.name;
   nameWrap.append(name);
 
-  nameWrap.append(fillFavoriteMainPage(restaurant));
+  nameWrap.append(DBHelper.fillFavoritesHTML(restaurant));
   li.append(nameWrap);
 
   const addressWrap = document.createElement('div');
@@ -126,43 +126,6 @@ let createRestaurantHTML = (restaurant) => {
 
   return li;
 };
-
-let fillFavoriteMainPage = (restaurant) => {
-  const label = document.createElement('label');
-  label.setAttribute('aria-label', 'Label for checking favorite');
-  label.className = 'fav-container';
-  label.id = 'fav-label';
-
-  const icon = document.createElement('i');
-  icon.className = 'fas fa-heart';
-  icon.style.fontSize = '21px';
-  label.appendChild(icon);
-
-  const input = document.createElement('input');
-  input.type = 'checkbox';
-  input.setAttribute('aria-label', 'Select favorite');
-
-  if (restaurant.is_favorite == 'true') {
-    icon.style.color = '#d32f2f';
-  } else {
-    icon.style.color = '#aeb0b1';
-  }
-
-  input.checked = (restaurant.is_favorite  == 'true');
-  input.addEventListener('change', event => {
-    event.preventDefault();
-    if (input.checked == true) {
-      DBHelper.toggleFavorite(restaurant, input.checked);
-      icon.style.color = '#d32f2f';
-    } else {
-      DBHelper.toggleFavorite(restaurant, input.checked);
-      icon.style.color = '#aeb0b1';
-    }
-  });
-  label.appendChild(input);
-  return label;
-};
-
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
