@@ -21,7 +21,7 @@ let initMap = () => {
           center: restaurant.latlng,
           scrollwheel: false
         });
-        fillBreadcrumb();
+        fillBreadcrumb(self.restaurant);
         DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
       }
     }
@@ -36,7 +36,7 @@ window.gm_authFailure = () => {
 /**
  * @add restaurant name to the breadcrumb navigation menu
  */
-let fillBreadcrumb = (restaurant = self.restaurant) => {
+let fillBreadcrumb = (restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   breadcrumb.innerHTML = '';
 
@@ -107,6 +107,13 @@ let fillRestaurantHTML = (restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
   name.setAttribute('tabindex', '0');
+
+  console.log('restaurantFav', restaurant.is_favorite);
+  const favSelect = document.getElementById('fav-select');
+  favSelect.checked = (restaurant.is_favorite  == 'true');
+  favSelect.addEventListener('change', event => {
+    DBHelper.toggleFavorite(restaurant, favSelect.checked);
+  });
 
   const image = document.getElementById('restaurant-img');
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
@@ -210,9 +217,13 @@ let createReviewHTML = (review) => {
   li.appendChild(div);
 
   const rating = document.createElement('p');
-  rating.innerHTML = `RATING: ${review.rating}`;
-  rating.className = 'number-rating';
-  rating.setAttribute('tabindex', '0');
+
+  for (let i = 0; i < review.rating; i++) {
+    const icon = document.createElement('i');
+    icon.className = 'fas fa-star';
+    rating.appendChild(icon);
+  }
+
   li.appendChild(rating);
 
   const comments = document.createElement('p');
