@@ -70,19 +70,23 @@ class DBHelper {
     //check if data exists in indexDB API if it does return callback
     DBHelper.getCachedIndexedDB('restaurants').then(results => {
       if (results && results.length > 0) {
+        console.log('restaurants', results);
         callback(null, results);
+      } else {
+        // Use else condition to avoid fetching from sails server
+        // because updating favorite on the sails server is not persistent
+        // and to get data from IndexedDB only
+        fetch(`${DBHelper.DATABASE_URL}/restaurants`)
+          .then(response => response.json())
+          .then(restaurants => {
+            //store data in indexDB API after fetching
+            DBHelper.storeDataIndexedDb(restaurants, 'restaurants');
+            return callback(null, restaurants);
+          })
+          .catch(err => {
+            return callback(err , null);
+          });
       }
-      fetch(`${DBHelper.DATABASE_URL}/restaurants`)
-        .then(response => response.json())
-        .then(restaurants => {
-          console.log('restaurants', restaurants);
-          //store data in indexDB API after fetching
-          DBHelper.storeDataIndexedDb(restaurants, 'restaurants');
-          callback(null, restaurants);
-        })
-        .catch(err => {
-          callback(err , null);
-        });
     });
   }
   /**
@@ -99,7 +103,6 @@ class DBHelper {
       const index = store.index('restaurant_id');
 
       index.getAll(restaurant.id).then(results => {
-        //console.log('reviews', results);
         callback(null, results);
 
         if (!navigator.onLine) {
@@ -180,6 +183,19 @@ class DBHelper {
     });
   }
 
+  static fetchRestaurantByFavorites(favorite, callback) {
+    // Fetch all restaurants
+    DBHelper.fetchRestaurants((error, restaurants) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        // Filter restaurants to have only given favorite value
+        const results = restaurants.filter(r => r.favorites == favorite);
+        callback(null, results);
+      }
+    });
+  }
+
   /**
    * @fetch restaurants by a cuisine and a neighborhood with proper error handling.
    */
@@ -195,6 +211,27 @@ class DBHelper {
         }
         if (neighborhood != 'all') { // filter by neighborhood
           results = results.filter(r => r.neighborhood == neighborhood);
+        }
+        callback(null, results);
+      }
+    });
+  }
+
+  static fetchRestaurantByCuisineNeighborhoodAndFavorite(cuisine, neighborhood, favorite, callback) {
+    // Fetch all restaurants
+    DBHelper.fetchRestaurants((error, restaurants) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        let results = restaurants;
+        if (cuisine != 'all') { // filter by cuisine
+          results = results.filter(r => r.cuisine_type == cuisine);
+        }
+        if (neighborhood != 'all') { // filter by neighborhood
+          results = results.filter(r => r.neighborhood == neighborhood);
+        }
+        if (favorite == 'true') {
+          results = results.filter(r => r.is_favorite == 'true');
         }
         callback(null, results);
       }
@@ -339,19 +376,22 @@ class DBHelper {
 
   static toggleFavorite(restaurant, isFavorite) {
     return fetch(`${DBHelper.DATABASE_URL}/restaurants/${restaurant.id}/?is_favorite=${isFavorite}`, {
-      method: 'PUT'
+      method: 'PUT',
+      cache: 'no-cache',
     })
       .then(response => {
+        console.log(`updated API restaurant: ${restaurant.id} favorite : ${isFavorite}`);
         return response.json();
       })
       .then(data => {
-        console.log('dataFav', data);
-        DBHelper.storeDataIndexedDb(data, 'restaurants');
+        //console.log('dataFav', data.is_favorite);
+        DBHelper.storeDataIndexedDb([data], 'restaurants');
+        console.log(`updated IDB restaurant: ${restaurant.id} favorite : ${isFavorite}`);
         return data;
       })
       .catch(error => {
         restaurant.is_favorite = isFavorite;
-        DBHelper.storeDataIndexedDb(restaurant, 'restaurants');
+        DBHelper.storeDataIndexedDb([restaurant], 'restaurants');
         return;
       });
   }
