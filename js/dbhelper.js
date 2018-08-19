@@ -61,6 +61,7 @@ class DBHelper {
       datas.forEach(data => {
         store.put(data);
       });
+      return tx.complete;
     });
   }
   /**
@@ -291,6 +292,21 @@ class DBHelper {
     return (`/img/${restaurant.photograph}.jpg`);
   }
 
+  static deleteRestaurantReview(review_id) {
+    fetch(`${DBHelper.DATABASE_URL}/reviews/${review_id}`, {
+      method: 'DELETE'
+    })
+      .then(response => {
+        return response;
+      })
+      .then(data => {
+        return data;
+      })
+      .catch(err => {
+        console.log('Error', err);
+      });
+  }
+
   /**
    * @post review_data to the server when a user submits a review
    * online: keep it in the reviews store in IndexedDB
@@ -327,21 +343,6 @@ class DBHelper {
       });
   }
 
-  static deleteRestaurantReview(review_id) {
-    fetch(`${DBHelper.DATABASE_URL}/reviews/${review_id}`, {
-      method: 'DELETE'
-    })
-      .then(response => {
-        return response;
-      })
-      .then(data => {
-        return data;
-      })
-      .catch(err => {
-        console.log('Error', err);
-      });
-  }
-
   /**
    * @clear data in the offline-reviews store
    */
@@ -365,7 +366,6 @@ class DBHelper {
       const store = tx.objectStore('offline-reviews');
 
       store.getAll().then(offlineReviews => {
-        console.log('offlineReviews', offlineReviews);
         offlineReviews.forEach(review => {
           DBHelper.createRestaurantReview(review);
         });
@@ -377,21 +377,22 @@ class DBHelper {
   static toggleFavorite(restaurant, isFavorite) {
     return fetch(`${DBHelper.DATABASE_URL}/restaurants/${restaurant.id}/?is_favorite=${isFavorite}`, {
       method: 'PUT',
-      cache: 'no-cache',
     })
       .then(response => {
         console.log(`updated API restaurant: ${restaurant.id} favorite : ${isFavorite}`);
         return response.json();
       })
       .then(data => {
-        //console.log('dataFav', data.is_favorite);
         DBHelper.storeDataIndexedDb([data], 'restaurants');
         console.log(`updated IDB restaurant: ${restaurant.id} favorite : ${isFavorite}`);
         return data;
       })
       .catch(error => {
-        restaurant.is_favorite = isFavorite;
+        // convert from boolean to string because the API uses strings 'true' and 'false'
+        restaurant.is_favorite = isFavorite ? 'true' : 'false';
+
         DBHelper.storeDataIndexedDb([restaurant], 'restaurants');
+        console.log('store favorite offline');
         return;
       });
   }
