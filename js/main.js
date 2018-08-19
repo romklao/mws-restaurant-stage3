@@ -108,6 +108,9 @@ let createRestaurantHTML = (restaurant) => {
   const buttnIcon = document.createElement('button');
   buttnIcon.setAttribute('aria-label', 'Select as a favorite restaurant');
   buttnIcon.className = 'buttn-icon';
+  //let buttonHeart = document.getElementsByClassName('buttn-icon');
+
+  //buttonHeart.addEventListener('click', DBHelper.toggleFavorite(restaurant));
 
   const heart = document.createElement('i');
   heart.className = 'fas fa-heart';
@@ -184,14 +187,17 @@ let fillRestaurantsHTML = (restaurants) => {
 self.updateRestaurants = () => {
   const cSelect = document.getElementById('cuisines-select');
   const nSelect = document.getElementById('neighborhoods-select');
+  const fSelect = document.getElementById('favorites-select');
 
   const cIndex = cSelect.selectedIndex;
   const nIndex = nSelect.selectedIndex;
+  const fIndex = fSelect.selectedIndex;
 
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
+  const favorite = fSelect[fIndex].value;
 
-  DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
+  DBHelper.fetchRestaurantByCuisineNeighborhoodAndFavorite(cuisine, neighborhood, favorite, (error, restaurants) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
