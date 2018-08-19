@@ -49,6 +49,7 @@ let fillBreadcrumb = (restaurant) => {
 
   const liName = document.createElement('li');
   liName.innerHTML = restaurant.name;
+  liName.className = 'breadcrum-name';
   breadcrumb.appendChild(liName);
 
   breadcrumb.appendChild(DBHelper.fillFavoritesHTML(restaurant));
