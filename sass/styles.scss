@@ -148,7 +148,7 @@ nav h1 a {
 
 .filter-options {
   width: 100%;
-  background-color: #039be5;
+  background-color: #0288d1;
   padding: 10px;
   border-bottom: 1px solid #fff;
 }
@@ -176,18 +176,14 @@ nav h1 a {
 .filter-box {
   display: flex;
   justify-content: flex-start;
-  width: 50%;
+  width: 75%;
   padding: 5px 3px;
-}
-
-.empty-div {
-  width: 25%;
 }
 
 .rating-box {
   width: 60px;
   overflow: hidden;
-  border: 1px solid #039be5;
+  border: 1px solid #006db3;
   position: relative;
   background: #fff;
 }
@@ -228,9 +224,6 @@ nav h1 a {
 .neighborhoods-wrap, .cuisines-wrap {
   margin-right: 10px;
 }
-
-
-
 
 /* ====================== Restaurant Listing ====================== */
 
@@ -283,14 +276,22 @@ nav h1 a {
 }
 
 .fa-heart {
-  font-size: 20px;
+  font-size: 22px;
   color: #aeb0b1;
 }
 
 .fa-star {
   font-size: 19px;
-  color: #fdd835;
+  color: #ffca28;
 }
+
+#fav-label {
+  padding: 0;
+}
+
+/*.heart-mainpage {
+  font-size: 19px;
+}*/
 
 .buttn-icon {
   background: none;
@@ -356,13 +357,13 @@ nav h1 a {
 /* Customize the label (the container) */
 .fav-container {
   position: relative;
-  padding: 0 15px;
+  padding-left: 15px;
   cursor: pointer;
   font-size: 22px;
-  /*-webkit-user-select: none;
+  -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none;*/
+  user-select: none;
 }
 
 /* Hide the browser's default checkbox */
@@ -662,20 +663,22 @@ textarea:focus {
   }
 }
 
-@media screen and (min-width: 901px) and (max-width: 1100px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
+@media screen and (max-width: 600px) {
+  .filter-box {
+    flex-direction: column;
   }
-  #restaurants-list .restaurant-imgs {
-    height: 17vw;
+  .neighborhoods-wrap, .cuisines-wrap {
+    margin-bottom: 5px;
+  }
+}
+
+@media screen and (max-width: 701px) {
+  .form-box {
+    width: 80%;
   }
 }
 
 @media screen and (max-width: 901px) {
-  #restaurant-wrap,
-  #reviews-list {
-    width: 80%;
-  }
 }
 
 @media screen and (max-width: 950px) {
@@ -684,7 +687,10 @@ textarea:focus {
   }
   .filter-box {
     width: 100%;
-    justify-content: flex-start;
+  }
+  #restaurant-wrap,
+  #reviews-list {
+    width: 80%;
   }
 }
 
@@ -694,11 +700,15 @@ textarea:focus {
   }
 }
 
-@media screen and (max-width: 701px) {
-  .form-box {
-    width: 80%;
+@media screen and (min-width: 901px) and (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  #restaurants-list .restaurant-imgs {
+    height: 17vw;
   }
 }
+
 
 
 
