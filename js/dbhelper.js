@@ -451,31 +451,32 @@ window.addEventListener('offline', DBHelper.onGoOffline);
 /* @register ServiceWorker to cache data for the site
    * to allow any page that has been visited is accessible offline
    */
-navigator.serviceWorker.register('./sw.js').then(function(reg) {
+navigator.serviceWorker.register('./sw.js')
+  .then(function(reg) {
   // Registration was successful
-  console.log('ServiceWorker registration successful with scope: ', reg.scope);
-  if (!navigator.serviceWorker.controller) {
-    return;
-  }
-  if (reg.waiting) {
-    _updateReady(reg.waiting);
-    return;
-  }
-  if (reg.installing) {
-    _trackInstalling(reg.installing);
-    return;
-  }
+    console.log('ServiceWorker registration successful with scope: ', reg.scope);
+    if (!navigator.serviceWorker.controller) {
+      return;
+    }
+    if (reg.waiting) {
+      _updateReady(reg.waiting);
+      return;
+    }
+    if (reg.installing) {
+      _trackInstalling(reg.installing);
+      return;
+    }
 
-  reg.addEventListener('updatefound', function () {
-    _trackInstalling(reg.installing);
-  });
+    reg.addEventListener('updatefound', function () {
+      _trackInstalling(reg.installing);
+    });
 
-  var refreshing;
-  navigator.serviceWorker.addEventListener('controllerchange', function () {
-    if (refreshing) return;
-    refreshing = true;
-  });
-})
+    var refreshing;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (refreshing) return;
+      refreshing = true;
+    });
+  })
   .catch(function () {
     console.log('Service worker registration failed');
   });
