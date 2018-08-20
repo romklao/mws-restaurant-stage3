@@ -11,6 +11,10 @@ class DBHelper {
    * @Map marker for a restaurant.
    */
   static mapMarkerForRestaurant(restaurant, map) {
+    google.maps.event.addListenerOnce(map, 'idle', () => {
+      document.getElementsByTagName('iframe')[0].title = 'Google Maps';
+    });
+
     const marker = new google.maps.Marker({
       position: restaurant.latlng,
       title: restaurant.name,
@@ -286,7 +290,7 @@ class DBHelper {
     if (restaurant.photograph === undefined) {
       restaurant.photograph = 10;
     }
-    return (`/img/${restaurant.photograph}.jpg`);
+    return (`/img/${restaurant.photograph}.webp`);
   }
 
   static deleteRestaurantReview(review_id) {
@@ -420,7 +424,7 @@ class DBHelper {
 
     const icon = document.createElement('i');
     icon.className = 'fas fa-heart';
-    label.appendChild(icon);
+    label.append(icon);
 
     const input = document.createElement('input');
     input.type = 'checkbox';
@@ -443,7 +447,7 @@ class DBHelper {
         icon.style.color = '#aeb0b1';
       }
     });
-    label.appendChild(input);
+    label.append(input);
     return label;
   }
 }
