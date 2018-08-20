@@ -1,6 +1,6 @@
 # Mobile Web Specialist Certification Course
 
-## Restaurant Reviews_Stage 2
+## Restaurant Reviews_Stage 3
 
 <div  align="center">
 	<img src="img/demo-image.png" alt="restaurants reviews" height="550px">
