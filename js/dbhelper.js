@@ -374,20 +374,6 @@ class DBHelper {
       });
     });
   }
-
-  /*@create these functions to add online status to the browser
-   * when it is offline it will store review submissions in offline-reviews IndexedDB
-   * when connectivity is reestablished, it will call the function to show new reviews on the page
-  */
-  static onGoOnline() {
-    console.log('Going online');
-    DBHelper.createOfflineReview();
-  }
-
-  static onGoOffline() {
-    console.log('Going offline');
-  }
-
   /**
    *@when online update a value of a restaurant's favorite by sending the PUT request to the server
    *and store the data to IndexedDB so it can be used when offline
@@ -449,6 +435,19 @@ class DBHelper {
     });
     label.append(input);
     return label;
+  }
+
+  /*@create these functions to add online status to the browser
+   * when it is offline it will store review submissions in offline-reviews IndexedDB
+   * when connectivity is reestablished, it will call the function to show new reviews on the page
+  */
+  static onGoOnline() {
+    console.log('Going online');
+    DBHelper.createOfflineReview();
+  }
+
+  static onGoOffline() {
+    console.log('Going offline');
   }
 }
 
