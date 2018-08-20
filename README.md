@@ -16,7 +16,7 @@
 
 ## How to start the server
 
-Refer to https://github.com/udacity/mws-restaurant-stage-2
+Refer to https://github.com/udacity/mws-restaurant-stage-3
 
 ## How to start the app
 
