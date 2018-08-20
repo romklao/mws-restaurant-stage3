@@ -95,7 +95,6 @@ nav h1 {
 
 nav h1 a {
   color: #fff;
-  font-size: 15pt;
   font-weight: 600;
   letter-spacing: 10px;
   text-transform: uppercase;
@@ -117,10 +116,10 @@ nav h1 a {
 }
 
 /* Add a slash symbol (/) before/behind each list item */
-#breadcrumb li+li:before {
-    padding: 8px;
-    color: black;
-    content: "/\00a0";
+.home-link:after {
+  padding-left: 10px;
+  color: black;
+  content: "/\00a0";
 }
 
 /* Add a color to all links inside the list */
@@ -177,7 +176,7 @@ nav h1 a {
   display: flex;
   justify-content: flex-start;
   width: 75%;
-  padding: 5px 3px;
+  padding: 5px 0;
 }
 
 .rating-box {
@@ -212,13 +211,13 @@ nav h1 a {
 }
 
 .neighborhoods-wrap, .cuisines-wrap, .favorites-wrap {
-  width: 173px;
+  width: 172px;
   border: none;
 }
 
 .neighborhoods-wrap select , .cuisines-wrap select, .favorites-wrap select {
   padding: 8px 10px;
-  width: 173px;
+  width: 172px;
 }
 
 .neighborhoods-wrap, .cuisines-wrap {
@@ -294,7 +293,7 @@ nav h1 a {
   border: none;
 }
 
-#restaurants-list li h1 {
+#restaurants-list li h3 {
   color: #006db3;
   font-weight: 500;
   font-size: 12pt;
@@ -378,8 +377,7 @@ nav h1 a {
 
 #restaurant-name {
   color: #006db3;
-  font-size: 19pt;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0;
   padding: 21px 0;
   text-transform: uppercase;
@@ -443,10 +441,10 @@ nav h1 a {
   margin-right: auto;
 }
 
-.form-box > h2 {
+.form-box > h3 {
   margin: 0;
   color: #006db3;
-  font-size: 22pt;
+  font-size: 17pt;
   font-weight: 400;
   padding: 5px;
   text-align: center;
@@ -518,10 +516,10 @@ textarea:focus {
   border-top: 1px solid #fff;
 }
 
-#reviews-container h2 {
+#reviews-container h3 {
   margin: 0;
   color: #006db3;
-  font-size: 22pt;
+  font-size: 17pt;
   font-weight: 400;
   padding: 10px;
   text-align: center;
@@ -573,7 +571,7 @@ textarea:focus {
 }
 
 #reviews-list .review-name {
-  font-size: 15pt;
+  font-size: 14pt;
   color: white;
 }
 
@@ -665,9 +663,6 @@ textarea:focus {
   .form-box {
     width: 80%;
   }
-}
-
-@media screen and (max-width: 901px) {
 }
 
 @media screen and (max-width: 950px) {
