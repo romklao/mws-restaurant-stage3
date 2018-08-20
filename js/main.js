@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
  * Initialize Google map, called from HTML.
  */
 let initMap = () => {
+  google.maps.event.addListenerOnce(map, 'idle', () => {
+    document.getElementsByTagName('iframe')[0].title = 'Google Maps';
+  });
   if (typeof google !== 'undefined') {
     let loc = {
       lat: 40.722216,
@@ -101,7 +104,7 @@ let createRestaurantHTML = (restaurant) => {
 
   const nameWrap = document.createElement('div');
   nameWrap.className = 'name-wrap';
-  const name = document.createElement('h1');
+  const name = document.createElement('h3');
   name.innerHTML = restaurant.name;
   nameWrap.append(name);
   //import the fillFavoritesHTML from dbhelper.js
