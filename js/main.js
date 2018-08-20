@@ -149,9 +149,6 @@ let resetRestaurants = (restaurants) => {
  * Add markers for current restaurants to the map.
  */
 let addMarkersToMap = (restaurants) => {
-  google.maps.event.addListenerOnce(map, 'idle', () => {
-    document.getElementsByTagName('iframe')[0].title = 'Google Maps';
-  });
   restaurants.forEach(restaurant => {
     // Add marker to the map
     const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
