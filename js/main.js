@@ -55,7 +55,7 @@ let fillNeighborhoodsHTML = (neighborhoods) => {
     option.innerHTML = neighborhood;
     option.setAttribute('value', neighborhood);
     option.setAttribute('role', 'option');
-    select.appendChild(option);
+    select.append(option);
   });
 };
 
@@ -83,7 +83,7 @@ let fillCuisinesHTML = (cuisines) => {
     option.innerHTML = cuisine;
     option.setAttribute('value', cuisine);
     option.setAttribute('role', 'option');
-    select.appendChild(option);
+    select.append(option);
   });
 };
 
@@ -97,32 +97,32 @@ let createRestaurantHTML = (restaurant) => {
   image.className = 'restaurant-imgs';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.alt = `${restaurant.name} is ${restaurant.cuisine_type} restaurant`;
-  li.appendChild(image);
+  li.append(image);
 
   const nameWrap = document.createElement('div');
   nameWrap.className = 'name-wrap';
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
-  nameWrap.appendChild(name);
+  nameWrap.append(name);
   //import the fillFavoritesHTML from dbhelper.js
-  nameWrap.appendChild(DBHelper.fillFavoritesHTML(restaurant));
-  li.appendChild(nameWrap);
+  nameWrap.append(DBHelper.fillFavoritesHTML(restaurant));
+  li.append(nameWrap);
 
   const addressWrap = document.createElement('div');
   addressWrap.className = 'address-wrap';
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
-  addressWrap.appendChild(neighborhood);
+  addressWrap.append(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
-  addressWrap.appendChild(address);
-  li.appendChild(addressWrap);
+  addressWrap.append(address);
+  li.append(addressWrap);
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.appendChild(more);
+  li.append(more);
 
   return li;
 };
@@ -162,7 +162,7 @@ let fillRestaurantsHTML = (restaurants) => {
   const ul = document.getElementById('restaurants-list');
 
   restaurants.forEach(restaurant => {
-    ul.appendChild(createRestaurantHTML(restaurant));
+    ul.append(createRestaurantHTML(restaurant));
   });
   if(typeof google !== 'undefined') {
     addMarkersToMap(restaurants);

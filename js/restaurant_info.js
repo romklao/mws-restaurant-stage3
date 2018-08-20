@@ -44,15 +44,15 @@ let fillBreadcrumb = (restaurant) => {
   const link = document.createElement('a');
   link.href = '/';
   link.innerHTML = 'Home';
-  liHome.appendChild(link);
-  breadcrumb.appendChild(liHome);
+  liHome.append(link);
+  breadcrumb.append(liHome);
 
   const liName = document.createElement('li');
   liName.innerHTML = restaurant.name;
   liName.className = 'breadcrum-name';
-  breadcrumb.appendChild(liName);
+  breadcrumb.append(liName);
 
-  breadcrumb.appendChild(DBHelper.fillFavoritesHTML(restaurant));
+  breadcrumb.append(DBHelper.fillFavoritesHTML(restaurant));
 };
 
 /**
@@ -146,15 +146,15 @@ let fillRestaurantHoursHTML = (operatingHours) => {
     day.className = 'day-col';
     day.setAttribute('tabindex', '0');
 
-    row.appendChild(day);
+    row.append(day);
 
     const time = document.createElement('td');
     time.innerHTML = operatingHours[key];
     time.className = 'time-col';
     time.setAttribute('tabindex', '0');
-    row.appendChild(time);
+    row.append(time);
 
-    hours.appendChild(row);
+    hours.append(row);
   }
 };
 
@@ -167,17 +167,17 @@ let fillReviewsHTML = (reviews) => {
 
   const ul = document.createElement('ul');
   ul.id = 'reviews-list';
-  container.appendChild(ul);
+  container.append(ul);
 
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
   title.setAttribute('tabindex', '0');
-  container.appendChild(title);
+  container.append(title);
 
   if (!reviews) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
-    container.appendChild(noReviews);
+    container.append(noReviews);
     return;
   }
 
@@ -186,9 +186,9 @@ let fillReviewsHTML = (reviews) => {
   });
 
   sortedReviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
+    ul.append(createReviewHTML(review));
   });
-  container.appendChild(ul);
+  container.append(ul);
 };
 
 /**
@@ -202,30 +202,30 @@ let createReviewHTML = (review) => {
   name.className = 'review-name';
   name.setAttribute('tabindex', '0');
 
-  div.appendChild(name);
+  div.append(name);
 
   const date = document.createElement('p');
   date.innerHTML = new Date(review.updatedAt).toDateString();
   date.className = 'review-date';
   date.setAttribute('tabindex', '0');
 
-  div.appendChild(date);
-  li.appendChild(div);
+  div.append(date);
+  li.append(div);
 
   const rating = document.createElement('p');
 
   for (let i = 0; i < review.rating; i++) {
     const icon = document.createElement('i');
     icon.className = 'fas fa-star';
-    rating.appendChild(icon);
+    rating.append(icon);
   }
 
-  li.appendChild(rating);
+  li.append(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
   comments.setAttribute('tabindex', '0');
-  li.appendChild(comments);
+  li.append(comments);
 
   return li;
 };
