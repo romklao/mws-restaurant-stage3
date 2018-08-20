@@ -38,21 +38,16 @@ window.gm_authFailure = () => {
  */
 let fillBreadcrumb = (restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
-  breadcrumb.innerHTML = '';
-
-  const liHome = document.createElement('li');
-  const link = document.createElement('a');
-  link.href = '/';
-  link.innerHTML = 'Home';
-  liHome.append(link);
-  breadcrumb.append(liHome);
 
   const liName = document.createElement('li');
   liName.innerHTML = restaurant.name;
   liName.className = 'breadcrum-name';
   breadcrumb.append(liName);
 
-  breadcrumb.append(DBHelper.fillFavoritesHTML(restaurant));
+  const liIcon = document.createElement('li');
+  liIcon.append(DBHelper.fillFavoritesHTML(restaurant));
+
+  breadcrumb.append(liIcon);
 };
 
 /**
@@ -169,7 +164,7 @@ let fillReviewsHTML = (reviews) => {
   ul.id = 'reviews-list';
   container.append(ul);
 
-  const title = document.createElement('h2');
+  const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   title.setAttribute('tabindex', '0');
   container.append(title);
