@@ -384,7 +384,9 @@ class DBHelper {
         return;
       });
   }
-
+  /**
+   * @fill favorites in HTML so it can be used by both main and restaurant page
+   */
   static fillFavoritesHTML(restaurant) {
     const label = document.createElement('label');
     label.setAttribute('aria-label', 'Label for checking favorite');
