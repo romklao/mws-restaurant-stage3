@@ -2,6 +2,7 @@
 
 const gulp = require('gulp');
 const sass = require('gulp-sass');
+const inlinesource = require('gulp-inline-source');
 const autoprefixer = require('gulp-autoprefixer');
 const browserSync = require('browser-sync').create();
 const sourcemaps = require('gulp-sourcemaps');
@@ -38,6 +39,12 @@ gulp.task('copy-json', function() {
  */
 gulp.task('copy-html', function() {
   return gulp.src('./*.html')
+    .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('inline', function() {
+  return gulp.src('./*.html')
+    .pipe(inlinesource())
     .pipe(gulp.dest('./dist'));
 });
 /**
@@ -102,6 +109,7 @@ gulp.task('images-process', function() {
 gulp.task('dist', gulp.series(gulp.parallel(
   'copy-html',
   'copy-json',
+  'inline',
   'copy-images',
   'images-process',
   'styles',
