@@ -6,6 +6,7 @@ const autoprefixer = require('gulp-autoprefixer');
 const browserSync = require('browser-sync').create();
 const sourcemaps = require('gulp-sourcemaps');
 const imagemin = require('gulp-imagemin');
+const webp = require('gulp-webp');
 const pngquant = require('imagemin-pngquant');
 const browserify = require('browserify');
 const babelify = require('babelify');
@@ -27,6 +28,11 @@ gulp.task('styles', function() {
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/css'));
 });
+
+gulp.task('copy-json', function() {
+  return gulp.src('./manifest.json')
+    .pipe(gulp.dest('./dist'));
+});
 /**
  * @copy html file and save it to dist
  */
@@ -39,6 +45,7 @@ gulp.task('copy-html', function() {
  */
 gulp.task('copy-images', function() {
   return gulp.src('img/*')
+    .pipe(webp())
     .pipe(gulp.dest('dist/img'));
 });
 /**
@@ -94,6 +101,8 @@ gulp.task('images-process', function() {
 
 gulp.task('dist', gulp.series(gulp.parallel(
   'copy-html',
+  'copy-json',
+  'copy-images',
   'images-process',
   'styles',
   'scripts:sw',
@@ -108,6 +117,7 @@ gulp.task('test', gulp.series('dist'));
 gulp.task('default', gulp.series(gulp.parallel(
   'copy-images',
   'copy-html',
+  'copy-json',
   'styles',
   'scripts:main',
   'scripts:restaurant',
