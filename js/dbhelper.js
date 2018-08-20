@@ -8,6 +8,19 @@ import idb from 'idb';
 
 class DBHelper {
   /**
+   * @Map marker for a restaurant.
+   */
+  static mapMarkerForRestaurant(restaurant, map) {
+    const marker = new google.maps.Marker({
+      position: restaurant.latlng,
+      title: restaurant.name,
+      url: DBHelper.urlForRestaurant(restaurant),
+      map: map,
+      animation: google.maps.Animation.DROP
+    });
+    return marker;
+  }
+  /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
    */
@@ -433,19 +446,6 @@ class DBHelper {
     });
     label.appendChild(input);
     return label;
-  }
-  /**
-   * @Map marker for a restaurant.
-   */
-  static mapMarkerForRestaurant(restaurant, map) {
-    const marker = new google.maps.Marker({
-      position: restaurant.latlng,
-      title: restaurant.name,
-      url: DBHelper.urlForRestaurant(restaurant),
-      map: map,
-      animation: google.maps.Animation.DROP
-    });
-    return marker;
   }
 }
 
