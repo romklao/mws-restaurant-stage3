@@ -266,7 +266,7 @@ nav h1 a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 15px 0 7px;
+  margin: 5px 0;
   padding: 3px 0;
 }
 
@@ -656,6 +656,9 @@ textarea:focus {
   }
   .neighborhoods-wrap, .cuisines-wrap {
     margin-bottom: 5px;
+  }
+  .nav h1 a {
+    letter-spacing: 9px;
   }
 }
 
