@@ -9,6 +9,7 @@ var markers = [];
  */
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
+  DBHelper.addTitleToMap();
   fetchNeighborhoods();
   fetchCuisines();
 });
@@ -17,9 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
  * Initialize Google map, called from HTML.
  */
 let initMap = () => {
-  google.maps.event.addListenerOnce(map, 'idle', () => {
-    document.getElementsByTagName('iframe')[0].title = 'Google Maps';
-  });
   if (typeof google !== 'undefined') {
     let loc = {
       lat: 40.722216,

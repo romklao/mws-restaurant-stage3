@@ -8,13 +8,19 @@ import idb from 'idb';
 
 class DBHelper {
   /**
+   * Database URL.
+   * Change this to restaurants.json file location on your server.
+   */
+  static get DATABASE_URL() {
+    const port = 1337;// Change this to your server port
+    return `http://localhost:${port}`;
+  }
+
+  /**
    * @Map marker for a restaurant.
    */
   static mapMarkerForRestaurant(restaurant, map) {
-    google.maps.event.addListenerOnce(map, 'idle', () => {
-      document.getElementsByTagName('iframe')[0].title = 'Google Maps';
-    });
-
+    DBHelper.addTitleToMap();
     const marker = new google.maps.Marker({
       position: restaurant.latlng,
       title: restaurant.name,
@@ -25,12 +31,12 @@ class DBHelper {
     return marker;
   }
   /**
-   * Database URL.
-   * Change this to restaurants.json file location on your server.
+   * @add attribute title to <iframe> in Google Map to improve the accessibility
    */
-  static get DATABASE_URL() {
-    const port = 1337;// Change this to your server port
-    return `http://localhost:${port}`;
+  static addTitleToMap() {
+    google.maps.event.addListenerOnce(map, 'idle', () => {
+      document.getElementsByTagName('iframe')[0].title = 'Google Maps';
+    });
   }
 
   /**
