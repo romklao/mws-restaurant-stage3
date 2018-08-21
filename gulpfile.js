@@ -55,6 +55,7 @@ gulp.task('copy-images', function() {
     .pipe(webp())
     .pipe(gulp.dest('dist/img'));
 });
+
 /**
  * @copy sw.js, sourcemaps so it can be debugged in the web dev tool,
  * and save it to dist
