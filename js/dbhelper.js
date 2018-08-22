@@ -140,7 +140,7 @@ class DBHelper {
             let reviewsLen = reviews.length;
             if (reviewsLen >= 29) {
               for (let i = 0; i < reviewsLen - 20; i++) {
-                DBHelper.deleteRestaurantReview(reviews[i].id);
+                DBHelper.deleteRestaurantReviews(reviews[i].id);
               }
             }
             DBHelper.storeDataIndexedDb(reviews, 'reviews');
@@ -299,7 +299,7 @@ class DBHelper {
     return (`/img/${restaurant.photograph}.webp`);
   }
 
-  static deleteRestaurantReview(review_id) {
+  static deleteRestaurantReviews(review_id) {
     fetch(`${DBHelper.DATABASE_URL}/reviews/${review_id}`, {
       method: 'DELETE'
     })
