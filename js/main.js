@@ -34,6 +34,20 @@ let initMap = () => {
 };
 
 /**
+ * Add markers for current restaurants to the map.
+ */
+let addMarkersToMap = (restaurants) => {
+  restaurants.forEach(restaurant => {
+    // Add marker to the map
+    const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
+    google.maps.event.addListener(marker, 'click', () => {
+      window.location.href = marker.url;
+    });
+    markers.push(marker);
+  });
+};
+
+/**
  * Fetch all neighborhoods and set their HTML.
  */
 let fetchNeighborhoods = () => {
@@ -106,7 +120,7 @@ let createRestaurantHTML = (restaurant) => {
   name.innerHTML = restaurant.name;
   nameWrap.append(name);
   //import the fillFavoritesHTML from dbhelper.js
-  nameWrap.append(DBHelper.fillFavoritesHTML(restaurant));
+  nameWrap.append(fillFavoritesHTML(restaurant));
   li.append(nameWrap);
 
   const addressWrap = document.createElement('div');
@@ -144,19 +158,6 @@ let resetRestaurants = (restaurants) => {
 };
 
 /**
- * Add markers for current restaurants to the map.
- */
-let addMarkersToMap = (restaurants) => {
-  restaurants.forEach(restaurant => {
-    // Add marker to the map
-    const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
-    google.maps.event.addListener(marker, 'click', () => {
-      window.location.href = marker.url;
-    });
-    markers.push(marker);
-  });
-};
-/**
  * Create all restaurants HTML and add them to the webpage.
  */
 let fillRestaurantsHTML = (restaurants) => {
@@ -169,6 +170,43 @@ let fillRestaurantsHTML = (restaurants) => {
     addMarkersToMap(restaurants);
   }
 };
+
+/**
+ * @fill favorites in HTML so it can be used by both main and restaurant page
+ */
+export default function fillFavoritesHTML(restaurant) {
+  const label = document.createElement('label');
+  label.setAttribute('aria-label', 'Label for checking favorite');
+  label.className = 'fav-container';
+
+  const icon = document.createElement('i');
+  icon.className = 'fas fa-heart';
+  label.append(icon);
+
+  const input = document.createElement('input');
+  input.type = 'checkbox';
+  input.setAttribute('aria-label', 'Select favorite');
+
+  if (restaurant.is_favorite == 'true') {
+    icon.style.color = '#d32f2f';
+  } else {
+    icon.style.color = '#aeb0b1';
+  }
+
+  input.checked = (restaurant.is_favorite  == 'true');
+  input.addEventListener('change', event => {
+    event.preventDefault();
+    if (input.checked == true) {
+      DBHelper.toggleFavorite(restaurant, input.checked);
+      icon.style.color = '#d32f2f';
+    } else {
+      DBHelper.toggleFavorite(restaurant, input.checked);
+      icon.style.color = '#aeb0b1';
+    }
+  });
+  label.append(input);
+  return label;
+}
 
 /**
  * Update page and map for current restaurants.
@@ -196,4 +234,6 @@ self.updateRestaurants = () => {
     }
   });
 };
+
+
 
