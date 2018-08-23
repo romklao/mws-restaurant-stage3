@@ -209,8 +209,8 @@ export default function fillFavoritesHTML(restaurant) {
 }
 
 /**
- * Update page and map for current restaurants.
-   And make it global so the index.html can use the function
+ * Update page and map for current restaurants and make it global so
+ * it allows index.html use this function to update the content
  */
 self.updateRestaurants = () => {
   const cSelect = document.getElementById('cuisines-select');
