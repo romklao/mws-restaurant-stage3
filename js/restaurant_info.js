@@ -1,6 +1,7 @@
 'use strict';
 
 import DBHelper from './dbhelper';
+import fillFavoritesHTML from './main';
 
 /**
  * @initialize Google map, called from HTML.
@@ -45,7 +46,8 @@ let fillBreadcrumb = (restaurant) => {
   breadcrumb.append(liName);
 
   const liIcon = document.createElement('li');
-  liIcon.append(DBHelper.fillFavoritesHTML(restaurant));
+  //get fillFavoritesHTML() from main.js
+  liIcon.append(fillFavoritesHTML(restaurant));
 
   breadcrumb.append(liIcon);
 };
