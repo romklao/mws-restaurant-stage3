@@ -657,8 +657,11 @@ textarea:focus {
   .neighborhoods-wrap, .cuisines-wrap {
     margin-bottom: 5px;
   }
-  .nav h1 a {
-    letter-spacing: 9px;
+  nav h1 a {
+    letter-spacing: 8px;
+  }
+  nav h1 {
+    padding-left: 7px;
   }
 }
 
