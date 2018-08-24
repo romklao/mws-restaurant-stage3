@@ -297,7 +297,7 @@ class DBHelper {
     if (restaurant.photograph === undefined) {
       restaurant.photograph = 10;
     }
-    return (`/img/${restaurant.photograph}.webp`);
+    return (`img/${restaurant.photograph}.webp`);
   }
 
   static deleteRestaurantReviews(review_id) {
