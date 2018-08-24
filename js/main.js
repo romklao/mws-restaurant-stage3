@@ -8,8 +8,8 @@ var markers = [];
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  initMap();
   DBHelper.addTitleToMap();
+  initMap();
   fetchNeighborhoods();
   fetchCuisines();
 });
@@ -120,7 +120,7 @@ let createRestaurantHTML = (restaurant) => {
   name.innerHTML = restaurant.name;
   nameWrap.append(name);
   //import the fillFavoritesHTML from dbhelper.js
-  nameWrap.append(fillFavoritesHTML(restaurant));
+  nameWrap.append(DBHelper.fillFavoritesHTML(restaurant));
   li.append(nameWrap);
 
   const addressWrap = document.createElement('div');
@@ -170,43 +170,6 @@ let fillRestaurantsHTML = (restaurants) => {
     addMarkersToMap(restaurants);
   }
 };
-
-/**
- * @fill favorites in HTML so it can be used by both main and restaurant page
- */
-export default function fillFavoritesHTML(restaurant) {
-  const label = document.createElement('label');
-  label.setAttribute('aria-label', 'Label for checking favorite');
-  label.className = 'fav-container';
-
-  const icon = document.createElement('i');
-  icon.className = 'fas fa-heart';
-  label.append(icon);
-
-  const input = document.createElement('input');
-  input.type = 'checkbox';
-  input.setAttribute('aria-label', 'Select favorite');
-
-  if (restaurant.is_favorite == 'true') {
-    icon.style.color = '#d32f2f';
-  } else {
-    icon.style.color = '#aeb0b1';
-  }
-
-  input.checked = (restaurant.is_favorite  == 'true');
-  input.addEventListener('change', event => {
-    event.preventDefault();
-    if (input.checked == true) {
-      DBHelper.toggleFavorite(restaurant, input.checked);
-      icon.style.color = '#d32f2f';
-    } else {
-      DBHelper.toggleFavorite(restaurant, input.checked);
-      icon.style.color = '#aeb0b1';
-    }
-  });
-  label.append(input);
-  return label;
-}
 
 /**
  * Update page and map for current restaurants and make it global so

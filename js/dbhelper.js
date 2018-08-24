@@ -297,7 +297,7 @@ class DBHelper {
     if (restaurant.photograph === undefined) {
       restaurant.photograph = 10;
     }
-    return (`img/${restaurant.photograph}.webp`);
+    return (`/img/${restaurant.photograph}.webp`);
   }
 
   static deleteRestaurantReviews(review_id) {
@@ -406,6 +406,43 @@ class DBHelper {
         console.log('store favorite offline');
         return;
       });
+  }
+
+  /**
+ * @fill favorites in HTML so it can be used by both main and restaurant page
+ */
+  static fillFavoritesHTML(restaurant) {
+    const label = document.createElement('label');
+    label.setAttribute('aria-label', 'Label for checking favorite');
+    label.className = 'fav-container';
+
+    const icon = document.createElement('i');
+    icon.className = 'fas fa-heart';
+    label.append(icon);
+
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.setAttribute('aria-label', 'Select favorite');
+
+    if (restaurant.is_favorite == 'true') {
+      icon.style.color = '#d32f2f';
+    } else {
+      icon.style.color = '#aeb0b1';
+    }
+
+    input.checked = (restaurant.is_favorite  == 'true');
+    input.addEventListener('change', event => {
+      event.preventDefault();
+      if (input.checked == true) {
+        DBHelper.toggleFavorite(restaurant, input.checked);
+        icon.style.color = '#d32f2f';
+      } else {
+        DBHelper.toggleFavorite(restaurant, input.checked);
+        icon.style.color = '#aeb0b1';
+      }
+    });
+    label.append(input);
+    return label;
   }
 
   /*@create these functions to add online status to the browser
