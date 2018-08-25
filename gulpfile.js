@@ -140,7 +140,7 @@ gulp.task('default', gulp.series(gulp.parallel(
   'scripts:main',
   'scripts:restaurant',
   'scripts:sw'), function() {
-  gulp.watch('sass/**/*.scss', gulp.series('styles'));
+  gulp.watch('./sass/**/*.scss', gulp.series('styles'));
   gulp.watch('./*.html', gulp.series('copy-html'));
   gulp.watch('./js/**/*.js', gulp.series('scripts:main', 'scripts:restaurant'));
   gulp.watch('./sw.js', gulp.series('scripts:main', 'scripts:restaurant'));
