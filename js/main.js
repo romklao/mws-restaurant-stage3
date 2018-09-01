@@ -9,7 +9,6 @@ var markers = [];
  */
 document.addEventListener('DOMContentLoaded', () => {
   DBHelper.addTitleToMap();
-  DBHelper.addAltToMap();
   initMap();
   fetchNeighborhoods();
   fetchCuisines();
