@@ -41,16 +41,6 @@ class DBHelper {
     });
   }
 
-  static addAltToMap() {
-    google.maps.event.addListener(self.map, 'tilesloaded', function(evt){
-      self.getDiv().find('img').each(function(i, eimg){
-        if(!eimg.alt || eimg.alt ===''){
-          eimg.alt = 'Google Maps Image';
-        }
-      });
-    });
-  }
-
   /**
    * @open database to store data retrieved from the server in indexedDB API
    */
