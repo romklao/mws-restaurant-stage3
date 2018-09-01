@@ -22,6 +22,7 @@ class DBHelper {
    */
   static mapMarkerForRestaurant(restaurant, map) {
     DBHelper.addTitleToMap();
+    DBHelper.addAltToMap();
     const marker = new google.maps.Marker({
       position: restaurant.latlng,
       title: restaurant.name,
@@ -37,6 +38,16 @@ class DBHelper {
   static addTitleToMap() {
     google.maps.event.addListenerOnce(map, 'idle', () => {
       document.getElementsByTagName('iframe')[0].title = 'Google Maps';
+    });
+  }
+
+  static addAltToMap() {
+    google.maps.event.addListener(self.map, 'tilesloaded', function(evt){
+      self.getDiv().find('img').each(function(i, eimg){
+        if(!eimg.alt || eimg.alt ===''){
+          eimg.alt = 'Google Maps Image';
+        }
+      });
     });
   }
 
