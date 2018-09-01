@@ -22,7 +22,6 @@ class DBHelper {
    */
   static mapMarkerForRestaurant(restaurant, map) {
     DBHelper.addTitleToMap();
-    DBHelper.addAltToMap();
     const marker = new google.maps.Marker({
       position: restaurant.latlng,
       title: restaurant.name,
